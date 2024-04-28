@@ -1,0 +1,116 @@
+[
+    {
+        "name": "Vault Enthusiast"
+    },
+    {
+        "name": "Survivalist"
+    },
+    {
+        "name": "Scavenger"
+    },
+    {
+        "name": "Hunter"
+    },
+    {
+        "name": "Raider (not allied with faction) "
+    },
+    {
+        "name": "Mechanic"
+    },
+    {
+        "name": "Gangster"
+    },
+    {
+        "name": "Trader "
+    },
+    {
+        "name": "Farmer "
+    },
+    {
+        "name": "Drunk "
+    },
+    {
+        "name": "Doctor "
+    },
+    {
+        "name": "Scientist "
+    },
+    {
+        "name": "Mercenary "
+    },
+    {
+        "name": "Ballplayer "
+    },
+    {
+        "name": "Drifter / Thug "
+    },
+    {
+        "name": "Thief "
+    },
+    {
+        "name": "Sailor "
+    },
+    {
+        "name": "Greaser "
+    },
+    {
+        "name": "Scout / Sniper "
+    },
+    {
+        "name": "Radiation Explorer "
+    },
+    {
+        "name": "Brotherhood of Steel Initiate (no power armor, not allied with faction) "
+    },
+    {
+        "name": "Railroad Tourist (not allied with faction) "
+    },
+    {
+        "name": "Escaped Synth (not allied with faction) "
+    },
+    {
+        "name": "Minuteman/woman (not allied with faction) "
+    },
+    {
+        "name": "Church of Atom Novice (not allied with faction) "
+    },
+    {
+        "name": "Gunner Conscript (not allied with faction) "
+    },
+    {
+        "name": "Forged member (not allied with faction) "
+    },
+    {
+        "name": "Chinese Agent "
+    },
+    {
+        "name": "Wealthy wastelander "
+    },
+    {
+        "name": "Poor wastelander "
+    },
+    {
+        "name": "Cannibal "
+    },
+    {
+        "name": "Enclave remnant (must have installed one of: Enclave X-02 or Enclave X-03 or Enclave Officer (standalone version) - you get power armor, but no frame) "
+    },
+    {
+        "name": "NCR Ranger (must have NCR Ranger installed) "
+    },
+    {
+        "name": "Rust Devil (must have Automatron installed; not allied with faction) "
+    },
+    {
+        "name": "Trapper (must have Far Harbor installed; not allied with faction) "
+    },
+    {
+        "name": "Pack member (must have Nuka World installed; not allied with faction) "
+    },
+    {
+        "name": "Operators member (must have Nuka World installed; not allied with faction) "
+    },
+    {
+        "name": "Disciples member (must have Nuka World installed; not allied with faction) "
+    }
+]

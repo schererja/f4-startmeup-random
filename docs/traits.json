@@ -1,0 +1,78 @@
+[
+    {
+        "name": "Broad Shoulders",
+        "description": "Your broad shoulders add +25 to your carrying capacity (+15 in Survival mode), but due to your high center of gravity, you are more likely to be staggered by incoming blows. "
+    },
+    {
+        "name": "Bruiser",
+        "description": "A little slower, but a little bigger. You may not hit as often, but they will feel it when you do! Power attacks deal 30% more damage, but cost 30% more Action Points to perform."
+    },
+    {
+        "name": "Claustrophobia",
+        "description": "You have a fear of enclosed spaces. You gain +1 to all SPECIAL attributes when outside, but suffer -1 when indoors"
+    },
+    {
+        "name": "Early Bird",
+        "description": "Hey early risers! Enjoy a +2 to each of your SPECIAL attributes from 6 am to 12 pm, but suffer -1 from 6 pm to 6 am when you're not at your best."
+    },
+    {
+        "name": "Fast Metabolism",
+        "description": "Your metabolic rate is twice normal. This means that you are half as resistant to radiation and poison, but your body heals at double the normal pace."
+    },
+    {
+        "name": "Fast Shot",
+        "description": " You don't have time to aim for a targeted attack, because you attack faster than normal people. Automatic and magazined weapons fire 20% faster, and AP costs are 20% lower, but you are 20% less accurate."
+    },
+    {
+        "name": "Finesse",
+        "description": "Your attacks show a lot of finesse. You don't do as much damage (-30% for normal attacks), but you cause more critical hits (10% constant chance any time)."
+    },
+    {
+        "name": "Four Eyes",
+        "description": "While wearing any type of eyewear, you have +1 Perception. Without eyewear, you have -1 Perception."
+    },
+    {
+        "name": "Gifted",
+        "description": "You have more innate abilities than most, so you have not spent as much time honing your skills. You gain a permanent +2 to each SPECIAL stat, but gain experience at half the normal rate."
+    },
+    {
+        "name": "Good Natured",
+        "description": "You studied less-combative skills as you were growing up. People are 20% easier to persuade, vendor prices are 20% better, but your overall damage is reduced by 15%. "
+    },
+    {
+        "name": "Heavy Handed",
+        "description": "You swing harder, but expend more energy. Your melee attacks do 20% more damage and are more likely to stagger, but cost 20% more action points."
+    },
+    {
+        "name": "Hot Blooded",
+        "description": "When your health drops below 50% you gain +15% more damage, but you also suffer -2 to your Agility and Perception attributes"
+    },
+    {
+        "name": "Kamikaze",
+        "description": "You boldness grants you +20 Action Points and +10% Action Point refresh rate, but your reckless nature causes you to take 20% more damage from weapons, explosions, and radiation."
+    },
+    {
+        "name": "Loose Cannon",
+        "description": "You love big guns, but your enthusiasm means you get carried away. Heavy weapons do 30% more damage, but are 30% less accurate. "
+    },
+    {
+        "name": "Night Owl (opposite of Early Bird)",
+        "description": "Staying up late, you a +2 to each of your SPECIAL attributes from midnight to 6 am, but suffer -1 from 6 am to 6 pm when you're not at your best."
+    },
+    {
+        "name": "Small Frame",
+        "description": "You are not quite as big as other people, but that never slowed you down. You gain +2 Agility, but your limbs are 20% more easily crippled. "
+    },
+    {
+        "name": "Trigger Discipline",
+        "description": "While using ranged weapons, you fire 20% more slowly but are 20% more accurate."
+    },
+    {
+        "name": "Unsightly (similar to Four Eyes) ",
+        "description": "You may be good or bad, but you're definitely ugly. While wearing any type of mask, you get a confidence boost for +2 Charisma. With a bare face, you have -2 Charisma. "
+    },
+    {
+        "name": "No Trait",
+        "description": "You got lucky, and you don't have a unique trait. "
+    }
+]

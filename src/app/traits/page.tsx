@@ -1,9 +1,5 @@
-import Link from "next/link";
-
-import { api } from "~/trpc/server";
 import { TraitForm } from "../_components/traits/create-trait";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
-import { TraitsTable } from "../_components/traits/traitsTable";
 
 export default async function Home() {
   return (

@@ -1,0 +1,11 @@
+{
+    "character": [
+        "api/characters/:characterid",
+        "api/characters/:characterid/specials/:specialsid",
+        "api/characters/:characterid/startingWith/:startingWithid",
+        "api/characters/:characterid/locations/:locationid",
+        "api/characters/:characterid/jobs/:jobid",
+        "api/characters/:characterid/traits/:traitid",
+        "api/characters/:characterid/death/:deathid"
+    ]
+}

@@ -25,7 +25,7 @@ export async function TraitTable() {
       </TableHeader>
       <TableBody>
         {traits.map((trait) => (
-          <TableRow>
+          <TableRow key={trait.name}>
             <TableCell key={trait.id}>{trait.id}</TableCell>
             <TableCell key={trait.id}>{trait.name}</TableCell>
             <TableCell key={trait.id}>{trait.description}</TableCell>

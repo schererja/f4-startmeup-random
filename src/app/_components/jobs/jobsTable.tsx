@@ -23,7 +23,7 @@ export async function JobsTable() {
       </TableHeader>
       <TableBody>
         {jobs.map((job) => (
-          <TableRow>
+          <TableRow key={job.name}>
             <TableCell key={job.id}>{job.id}</TableCell>
             <TableCell key={job.id}>{job.name}</TableCell>
             <TableCell key={job.id}>{job.uuid}</TableCell>

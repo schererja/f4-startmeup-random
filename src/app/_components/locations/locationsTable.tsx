@@ -23,7 +23,7 @@ export async function LocationsTable() {
       </TableHeader>
       <TableBody>
         {locations.map((location) => (
-          <TableRow>
+          <TableRow key={location.name}>
             <TableCell key={location.id}>{location.id}</TableCell>
             <TableCell key={location.id}>{location.name}</TableCell>
             <TableCell key={location.id}>{location.uuid}</TableCell>

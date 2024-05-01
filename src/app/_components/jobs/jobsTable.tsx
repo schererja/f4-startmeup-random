@@ -9,9 +9,8 @@ import {
 } from "~/components/ui/table";
 import { api } from "~/trpc/server";
 
-export async function TraitTable() {
-  const traits = await api.traits.getAll();
-  console.log(traits);
+export async function JobsTable() {
+  const jobs = await api.jobs.getAll();
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
@@ -19,17 +18,15 @@ export async function TraitTable() {
         <TableRow>
           <TableHead className="w-[100px]">Id</TableHead>
           <TableHead className="w-[100px]">Name</TableHead>
-          <TableHead className="w-[100px]">Description</TableHead>
           <TableHead className="w-[100px]">UUID</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {traits.map((trait) => (
+        {jobs.map((job) => (
           <TableRow>
-            <TableCell key={trait.id}>{trait.id}</TableCell>
-            <TableCell key={trait.id}>{trait.name}</TableCell>
-            <TableCell key={trait.id}>{trait.description}</TableCell>
-            <TableCell key={trait.id}>{trait.uuid}</TableCell>
+            <TableCell key={job.id}>{job.id}</TableCell>
+            <TableCell key={job.id}>{job.name}</TableCell>
+            <TableCell key={job.id}>{job.uuid}</TableCell>
           </TableRow>
         ))}
       </TableBody>

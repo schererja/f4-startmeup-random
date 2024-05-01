@@ -36,7 +36,7 @@ export const character = createTable(
 )
 
 
-export const job = createTable(
+export const jobs = createTable(
   "jobs",
   {
     id: serial("id").primaryKey(),
@@ -45,6 +45,7 @@ export const job = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
   },
   (job) => ({
     nameIndex: index("job_name_idx").on(job.name),
@@ -61,13 +62,14 @@ export const traits = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
+    uuid: uuid("uuid"),
   },
   (traits) => ({
     nameIndex: index("traits_name_idx").on(traits.name),
   })
 )
 
-export const location = createTable(
+export const locations = createTable(
   "locations",
   {
     id: serial("id").primaryKey(),
@@ -77,6 +79,7 @@ export const location = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
+    uuid: uuid("uuid"),
   },
   (location) => ({
     nameIndex: index("location_name_idx").on(location.name),

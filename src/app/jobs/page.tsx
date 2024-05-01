@@ -1,6 +1,6 @@
-import { TraitForm } from "../_components/traits/traitForm";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
-import { TraitTable } from "../_components/traits/traitsTable";
+import { JobsForm } from "../_components/jobs/jobsForm";
+import { JobsTable } from "../_components/jobs/jobsTable";
 
 export default async function Home() {
   return (
@@ -12,8 +12,8 @@ export default async function Home() {
           </div>
         </SignedOut>
         <SignedIn>
-          <TraitTable />
-          <TraitForm />
+          <JobsTable />
+          <JobsForm />
         </SignedIn>
       </div>
     </main>

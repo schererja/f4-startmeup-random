@@ -121,12 +121,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Strength</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Strength"
-                  {...field}
-                  value={strength}
-                  onChange={(e) => setStrength(e.target.value)}
-                />
+                <Input placeholder="Strength" {...field} value={strength} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed
@@ -142,12 +137,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Perception</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Perception"
-                  {...field}
-                  value={perception}
-                  onChange={(e) => setPerception(e.target.value)}
-                />
+                <Input placeholder="Perception" {...field} value={perception} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed
@@ -163,12 +153,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Endurance</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Endurance"
-                  {...field}
-                  value={endurance}
-                  onChange={(e) => setEndurance(e.target.value)}
-                />
+                <Input placeholder="Endurance" {...field} value={endurance} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed
@@ -184,12 +169,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Charisma</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Charisma"
-                  {...field}
-                  value={charisma}
-                  onChange={(e) => setCharisma(e.target.value)}
-                />
+                <Input placeholder="Charisma" {...field} value={charisma} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed
@@ -209,7 +189,6 @@ export function CharacterForm() {
                   placeholder="Intelligence"
                   {...field}
                   value={intelligence}
-                  onChange={(e) => setIntelligence(e.target.value)}
                 />
               </FormControl>
               <FormDescription>
@@ -226,12 +205,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Agility</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Agility"
-                  {...field}
-                  value={agility}
-                  onChange={(e) => setAgility(e.target.value)}
-                />
+                <Input placeholder="Agility" {...field} value={agility} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed
@@ -247,12 +221,7 @@ export function CharacterForm() {
             <FormItem>
               <FormLabel>Luck</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Luck"
-                  {...field}
-                  value={luck}
-                  onChange={(e) => setLuck(e.target.value)}
-                />
+                <Input placeholder="Luck" {...field} value={luck} />
               </FormControl>
               <FormDescription>
                 Use this to add in another job if needed

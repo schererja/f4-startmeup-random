@@ -62,7 +62,7 @@ export const traits = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid"),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
   },
   (traits) => ({
     nameIndex: index("traits_name_idx").on(traits.name),
@@ -79,7 +79,7 @@ export const locations = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid"),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
   },
   (location) => ({
     nameIndex: index("location_name_idx").on(location.name),
@@ -96,7 +96,7 @@ export const specialStats = createTable(
     intelligence: integer("intelligence"),
     agility: integer("agility"),
     luck: integer("luck"),
-    uuid: uuid("uuid"),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

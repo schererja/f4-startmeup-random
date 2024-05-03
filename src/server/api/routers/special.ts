@@ -11,22 +11,42 @@ export const specialsRouter = createTRPCRouter({
     //             greeting: `Hello ${input.text}`,
     //         };
     //     }),
-    // create: publicProcedure
-    //     .input(z.object({ name: z.string().min(1) }))
-    //     .mutation(async ({ ctx, input }) => {
-    //         // simulate a slow db call
-    //         await new Promise((resolve) => setTimeout(resolve, 1000));
+    create: publicProcedure
+        .input(z.object({
+            strength: z.number(),
+            perception: z.number(),
+            endurance: z.number(),
+            charisma: z.number(),
+            intelligence: z.number(),
+            agility: z.number(),
+            luck: z.number(),
+            uuid: z.string(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            // simulate a slow db call
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    //         await ctx.db.insert(posts).values({
-    //             name: input.name,
-    //         });
-    //     }),
+            await ctx.db.insert(specialStats).values({
+                strength: input.strength,
+                perception: input.perception,
+                endurance: input.endurance,
+                charisma: input.charisma,
+                intelligence: input.intelligence,
+                agility: input.agility,
+                luck: input.luck,
+                createdAt: new Date()
+            });
+        }),
 
     getLatest: publicProcedure.query(({ ctx }) => {
         return ctx.db.query.specialStats.findFirst({
             orderBy: (specialStats, { desc }) => [desc(specialStats.createdAt)],
         });
     }),
+    getAll: publicProcedure
+        .query(async ({ ctx }) => {
+            return ctx.db.query.specialStats.findMany();
+        }),
     // getByCharacterId: publicProcedure.query(({ ctx }) => {
     //     return ctx.db.query.specialStats.findFirst({
     //         orderBy: (specialStats, { desc }) => [desc(specialStats)],

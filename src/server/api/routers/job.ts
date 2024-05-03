@@ -18,4 +18,5 @@ export const jobsRouter = createTRPCRouter({
         .query(async ({ ctx }) => {
             return ctx.db.query.jobs.findMany();
         }),
+
 });

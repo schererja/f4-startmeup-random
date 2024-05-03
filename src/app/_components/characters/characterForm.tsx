@@ -249,7 +249,7 @@ export function CharacterForm() {
               if (numberOfStartingStats == 0) {
                 break;
               }
-              let randomNumber = Math.floor(Math.random() * 7) + 1;
+              const randomNumber = Math.floor(Math.random() * 7) + 1;
               switch (randomNumber) {
                 case 1:
                   newStrength += 1;

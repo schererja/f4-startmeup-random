@@ -37,19 +37,3 @@ export default async function Home() {
     </main>
   );
 }
-
-async function CrudShowcase() {
-  const latestCharacter = await api.character.getLatest();
-
-  return (
-    <div className="w-full max-w-xs">
-      {latestCharacter ? (
-        <p className="truncate">
-          Your most recent post: {latestCharacter.name}
-        </p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-    </div>
-  );
-}

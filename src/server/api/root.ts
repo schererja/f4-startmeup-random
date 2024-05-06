@@ -4,6 +4,7 @@ import { specialsRouter } from "~/server/api/routers/special";
 import { traitsRouter } from "~/server/api/routers/trait";
 import { locationsRouter } from "./routers/location";
 import { jobsRouter } from "./routers/job";
+import { stripVTControlCharacters } from "util";
 
 /**
  * This is the primary router for your server.
@@ -11,7 +12,7 @@ import { jobsRouter } from "./routers/job";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  character: characterRouter,
+  characters: characterRouter,
   specials: specialsRouter,
   traits: traitsRouter,
   locations: locationsRouter,

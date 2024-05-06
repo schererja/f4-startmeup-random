@@ -4,8 +4,10 @@ import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { CharacterForm } from "../_components/characters/characterForm";
 
 export default async function Home() {
-  const data = await api.specials.getAll();
-  console.log(data);
+  const traits = await api.traits.getAll();
+  const locations = await api.locations.getAll();
+  const jobs = await api.jobs.getAll();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center  text-black">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
@@ -15,7 +17,7 @@ export default async function Home() {
           </div>
         </SignedOut>
         <SignedIn>
-          <CharacterForm />
+          <CharacterForm traits={traits} locations={locations} jobs={jobs} />
         </SignedIn>
       </div>
     </main>

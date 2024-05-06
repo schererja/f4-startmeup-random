@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,7 +17,31 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+interface Trait {
+  name: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
+  uuid: string | null;
+}
 
+interface Location {
+  name: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
+  uuid: string | null;
+}
+
+interface Job {
+  name: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
+  uuid: string | null;
+}
+interface Props {
+  traits: Trait[];
+  locations: Location[];
+  jobs: Job[];
+}
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   strength: z.number().min(1).max(10),
@@ -28,12 +51,12 @@ const formSchema = z.object({
   intelligence: z.number().min(1).max(10),
   agility: z.number().min(1).max(10),
   luck: z.number().min(1).max(10),
-  trait: z.string().min(2).max(50),
-  location: z.string().min(2).max(50),
-  job: z.string().min(2).max(50),
+  trait: z.object({ name: z.string().min(1), uuid: z.string().min(1) }),
+  location: z.object({ name: z.string().min(1), uuid: z.string().min(1) }),
+  job: z.object({ name: z.string().min(1), uuid: z.string().min(1) }),
 });
 
-export function CharacterForm() {
+export function CharacterForm(props: Props) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [strength, setStrength] = useState(1);
@@ -43,10 +66,12 @@ export function CharacterForm() {
   const [intelligence, setIntelligence] = useState(1);
   const [agility, setAgility] = useState(1);
   const [luck, setLuck] = useState(1);
-  const [trait, setTrait] = useState("");
-  const [location, setLocation] = useState("");
-  const [job, setJob] = useState("");
-  const createjob = api.jobs.create.useMutation({
+
+  const [trait, setTrait] = useState({ name: "", uuid: "" });
+  const [location, setLocation] = useState({ name: "", uuid: "" });
+  const [job, setJob] = useState({ name: "", uuid: "" });
+
+  const createjob = api.characters.create.useMutation({
     onSuccess: () => {
       router.refresh();
       setName("");
@@ -57,14 +82,12 @@ export function CharacterForm() {
       setIntelligence(1);
       setAgility(1);
       setLuck(1);
-      setTrait("");
-      setLocation("");
-      setJob("");
     },
     onError: (error) => {
       console.log(error);
     },
   });
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -77,9 +100,9 @@ export function CharacterForm() {
       intelligence: 1,
       agility: 1,
       luck: 1,
-      trait: "",
-      location: "",
-      job: "",
+      trait: { name: "", uuid: "" },
+      location: { name: "", uuid: "" },
+      job: { name: "", uuid: "" },
     },
   });
 
@@ -88,7 +111,21 @@ export function CharacterForm() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          createjob.mutate({ name });
+          createjob.mutate({
+            name,
+            specialStats: {
+              strength,
+              perception,
+              endurance,
+              charisma,
+              intelligence,
+              agility,
+              luck,
+            },
+            trait,
+            location,
+            job,
+          });
         }}
         className="space-y-8"
       >
@@ -96,124 +133,121 @@ export function CharacterForm() {
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Name"
-                  {...field}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </FormControl>
+            <div className="flex">
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Name"
+                    {...field}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormControl>
 
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </div>
           )}
         />
-        <FormField
-          control={form.control}
-          name="strength"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Strength</FormLabel>
-              <FormControl>
-                <Input placeholder="Strength" {...field} value={strength} />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="perception"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Perception</FormLabel>
-              <FormControl>
-                <Input placeholder="Perception" {...field} value={perception} />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <div className="flex">
+              <FormItem>
+                <FormLabel>Perception</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Perception"
+                    {...field}
+                    value={perception}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+              <FormItem>
+                <FormLabel>Strength</FormLabel>
+                <FormControl>
+                  <Input placeholder="Strength" {...field} value={strength} />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </div>
           )}
         />
         <FormField
           control={form.control}
           name="endurance"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Endurance</FormLabel>
-              <FormControl>
-                <Input placeholder="Endurance" {...field} value={endurance} />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <div className="flex">
+              <FormItem>
+                <FormLabel>Endurance</FormLabel>
+                <FormControl>
+                  <Input placeholder="Endurance" {...field} value={endurance} />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+              <FormItem>
+                <FormLabel>Charisma</FormLabel>
+                <FormControl>
+                  <Input placeholder="Charisma" {...field} value={charisma} />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </div>
           )}
         />
-        <FormField
-          control={form.control}
-          name="charisma"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Charisma</FormLabel>
-              <FormControl>
-                <Input placeholder="Charisma" {...field} value={charisma} />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="intelligence"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Intelligence</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Intelligence"
-                  {...field}
-                  value={intelligence}
-                />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+            <div className="flex">
+              <FormItem>
+                <FormLabel>Intelligence</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Intelligence"
+                    {...field}
+                    value={intelligence}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+              <FormItem>
+                <FormLabel>Agility</FormLabel>
+                <FormControl>
+                  <Input placeholder="Agility" {...field} value={agility} />
+                </FormControl>
+                <FormDescription>
+                  Use this to add in another job if needed
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            </div>
           )}
         />
-        <FormField
-          control={form.control}
-          name="agility"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Agility</FormLabel>
-              <FormControl>
-                <Input placeholder="Agility" {...field} value={agility} />
-              </FormControl>
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <FormField
           control={form.control}
           name="luck"
@@ -230,12 +264,67 @@ export function CharacterForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="trait"
+          render={({ field }) => (
+            <div className="flex">
+              <FormItem>
+                <FormLabel>Trait</FormLabel>
+                <FormControl>
+                  <Input placeholder="Trait" {...field} value={trait.name} />
+                </FormControl>
 
+                <FormMessage />
+              </FormItem>
+              <FormItem>
+                <FormLabel>Job</FormLabel>
+                <FormControl>
+                  <Input placeholder="Job" {...field} value={job.name} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            </div>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Location"
+                  {...field}
+                  value={location.name}
+                />
+              </FormControl>
+              <FormDescription>
+                Use this to add in another job if needed
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button
           type="submit"
           disabled={createjob.isPending}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
+            if (!props.traits && !props.locations && !props.jobs) {
+              return;
+            }
+            let randomTrait =
+              props.traits[Math.floor(Math.random() * props.traits.length)];
+            let randomLocation =
+              props.locations[
+                Math.floor(Math.random() * props.locations.length)
+              ];
+            let randomJob =
+              props.jobs[Math.floor(Math.random() * props.jobs.length)];
 
             let numberOfStartingStats = 21;
             let newStrength = 1;
@@ -275,6 +364,21 @@ export function CharacterForm() {
                 default:
                   break;
               }
+              if (!randomTrait || !randomJob || !randomLocation) {
+                return;
+              }
+              if (
+                randomTrait.name == null ||
+                randomJob.name == null ||
+                randomLocation.name == null ||
+                randomTrait.uuid == null ||
+                randomJob.uuid == null ||
+                randomLocation.uuid == null ||
+                randomTrait.name == "" ||
+                randomJob.name == ""
+              ) {
+                return;
+              }
               setStrength(newStrength);
               setPerception(newPerception);
               setEndurance(newEndurance);
@@ -282,7 +386,12 @@ export function CharacterForm() {
               setIntelligence(newIntelligence);
               setAgility(newAgility);
               setLuck(newLuck);
-
+              setTrait({ name: randomTrait.name, uuid: randomTrait.uuid });
+              setJob({ name: randomJob.name, uuid: randomJob.uuid });
+              setLocation({
+                name: randomLocation.name,
+                uuid: randomLocation.uuid,
+              });
               numberOfStartingStats -= 1;
             }
           }}

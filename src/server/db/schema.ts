@@ -1,7 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
@@ -20,20 +20,6 @@ import {
  */
 export const createTable = pgTableCreator((name) => `f4sr_${name}`);
 
-export const character = createTable(
-  "characters",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt"),
-  },
-  (character) => ({
-    nameIndex: index("character_name_idx").on(character.name),
-  })
-)
 
 
 export const jobs = createTable(
@@ -45,11 +31,11 @@ export const jobs = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
   },
   (job) => ({
-    nameIndex: index("job_name_idx").on(job.name),
-  })
+    nameIndex: index("job_name_idx").on(job.name)
+  }),
 )
 
 export const traits = createTable(
@@ -62,7 +48,7 @@ export const traits = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
   },
   (traits) => ({
     nameIndex: index("traits_name_idx").on(traits.name),
@@ -79,7 +65,7 @@ export const locations = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
   },
   (location) => ({
     nameIndex: index("location_name_idx").on(location.name),
@@ -96,10 +82,30 @@ export const specialStats = createTable(
     intelligence: integer("intelligence"),
     agility: integer("agility"),
     luck: integer("luck"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
   }
+)
+export const characters = createTable(
+  "characters",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt"),
+    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
+    specialStats: uuid("specialStatsUUID").references(() => specialStats.uuid),
+    jobsUUID: uuid("jobsUUID").references(() => jobs.uuid),
+    traitsUUID: uuid("traitsUUID").references(() => traits.uuid),
+    locationsUUID: uuid("locationsUUID").references(() => locations.uuid),
+
+  },
+  (character) => ({
+    nameIndex: index("character_name_idx").on(character.name),
+  })
 )

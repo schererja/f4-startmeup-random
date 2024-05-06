@@ -317,13 +317,13 @@ export function CharacterForm(props: Props) {
             if (!props.traits && !props.locations && !props.jobs) {
               return;
             }
-            let randomTrait =
+            const randomTrait =
               props.traits[Math.floor(Math.random() * props.traits.length)];
-            let randomLocation =
+            const randomLocation =
               props.locations[
                 Math.floor(Math.random() * props.locations.length)
               ];
-            let randomJob =
+            const randomJob =
               props.jobs[Math.floor(Math.random() * props.jobs.length)];
 
             let numberOfStartingStats = 21;

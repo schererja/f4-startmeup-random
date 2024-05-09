@@ -18,12 +18,22 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { useAuth } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
 });
 
 export function LocationForm() {
+  const { isSignedIn, sessionId, userId } = useAuth();
+
+  if (isSignedIn && userId !== "user_2fkxhXmMfx2RdGSRFLPaG0qEInV") {
+    return (
+      <div>
+        <h1>You are not authorized to add to Locations</h1>
+      </div>
+    );
+  }
   const router = useRouter();
   const [name, setName] = useState("");
   const createlocation = api.locations.create.useMutation({
@@ -67,9 +77,6 @@ export function LocationForm() {
                 />
               </FormControl>
 
-              <FormDescription>
-                Use this to add in another location if needed
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -1,16 +1,10 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { characters, jobs, locations, specialStats, traits } from "~/server/db/schema";
+import { characters, specialStats } from "~/server/db/schema";
 
 export const characterRouter = createTRPCRouter({
-    // hello: publicProcedure
-    //     .input(z.object({ text: z.string() }))
-    //     .query(({ input }) => {
-    //         return {
-    //             greeting: `Hello ${input.text}`,
-    //         };
-    //     }),
+
 
     create: publicProcedure
         .input(z.object({
@@ -54,5 +48,51 @@ export const characterRouter = createTRPCRouter({
                 locationsUUID: input.location.uuid,
             });
         }),
+    getByUUID: publicProcedure
+        .input(z.object({ uuid: z.string() }))
+        .query(async ({ ctx, input }) => {
+
+            let character = await ctx.db.query.characters.findFirst({
+
+                where: (users, { eq }) => eq(users.uuid, input.uuid),
+
+            })
+            if (!character) return null
+            const characterStatsID = character.specialStats
+            const jobUUID = character.jobsUUID
+            const traitUUID = character.traitsUUID
+            const locationUUID = character.locationsUUID
+            if (!characterStatsID || !locationUUID || !traitUUID || !jobUUID) return null
+            const characterStats = await ctx.db.query.specialStats.findFirst({
+                where: (specialStats, { eq }) => eq(specialStats.uuid, characterStatsID),
+            })
+            const job = await ctx.db.query.jobs.findFirst({
+                where: (jobs, { eq }) => eq(jobs.uuid, jobUUID),
+            })
+            const trait = await ctx.db.query.traits.findFirst({
+                where: (traits, { eq }) => eq(traits.uuid, traitUUID),
+            })
+            const location = await ctx.db.query.locations.findFirst({
+                where: (locations, { eq }) => eq(locations.uuid, locationUUID),
+            })
+
+            let returnCharacter = {
+                character: character,
+                specialStats: characterStats,
+                job: job,
+                trait: trait,
+                location: location
+
+            }
+
+
+
+            return returnCharacter
+        }),
+    getAll: publicProcedure
+        .query(async ({ ctx }) => {
+            return ctx.db.query.characters.findMany();
+        }),
+
 
 });

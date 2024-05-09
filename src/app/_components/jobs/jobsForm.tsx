@@ -18,12 +18,22 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { useAuth } from "@clerk/nextjs";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
 });
 
 export function JobsForm() {
+  const { isSignedIn, sessionId, userId } = useAuth();
+
+  if (isSignedIn && userId !== "user_2fkxhXmMfx2RdGSRFLPaG0qEInV") {
+    return (
+      <div>
+        <h1>You are not authorized to add to Jobs</h1>
+      </div>
+    );
+  }
   const router = useRouter();
   const [name, setName] = useState("");
   const createjob = api.jobs.create.useMutation({
@@ -67,9 +77,6 @@ export function JobsForm() {
                 />
               </FormControl>
 
-              <FormDescription>
-                Use this to add in another job if needed
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -13,7 +13,7 @@ export async function JobsTable() {
   const jobs = await api.jobs.getAll();
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent Jobs.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Id</TableHead>

@@ -1,4 +1,11 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
+import Link from "next/link";
 
 export function TopNav() {
   return (
@@ -10,6 +17,11 @@ export function TopNav() {
           <SignInButton />
         </SignedOut>
         <SignedIn>
+          <Link href="/characters"> Characters</Link>
+          <Link href="/traits"> Traits</Link>
+          <Link href="/jobs"> Jobs</Link>
+          <Link href="/locations"> Locations</Link>
+          <Link href="/specials"> Specials</Link>
           <UserButton />
         </SignedIn>
       </div>

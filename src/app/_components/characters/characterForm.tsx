@@ -82,6 +82,9 @@ export function CharacterForm(props: Props) {
       setIntelligence(1);
       setAgility(1);
       setLuck(1);
+      setTrait({ name: "", uuid: "" });
+      setLocation({ name: "", uuid: "" });
+      setJob({ name: "", uuid: "" });
     },
     onError: (error) => {
       console.log(error);
@@ -145,9 +148,6 @@ export function CharacterForm(props: Props) {
                   />
                 </FormControl>
 
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             </div>
@@ -168,9 +168,7 @@ export function CharacterForm(props: Props) {
                     value={perception}
                   />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
               <FormItem>
@@ -178,9 +176,7 @@ export function CharacterForm(props: Props) {
                 <FormControl>
                   <Input placeholder="Strength" {...field} value={strength} />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             </div>
@@ -196,9 +192,7 @@ export function CharacterForm(props: Props) {
                 <FormControl>
                   <Input placeholder="Endurance" {...field} value={endurance} />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
               <FormItem>
@@ -206,9 +200,7 @@ export function CharacterForm(props: Props) {
                 <FormControl>
                   <Input placeholder="Charisma" {...field} value={charisma} />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             </div>
@@ -229,9 +221,7 @@ export function CharacterForm(props: Props) {
                     value={intelligence}
                   />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
               <FormItem>
@@ -239,9 +229,7 @@ export function CharacterForm(props: Props) {
                 <FormControl>
                   <Input placeholder="Agility" {...field} value={agility} />
                 </FormControl>
-                <FormDescription>
-                  Use this to add in another job if needed
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             </div>

@@ -13,7 +13,7 @@ export async function LocationsTable() {
   const locations = await api.locations.getAll();
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent Locations.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Id</TableHead>

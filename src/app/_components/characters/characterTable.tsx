@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
@@ -36,7 +37,11 @@ export async function CharacterTable() {
               <TableCell key={character.id}>{character.id}</TableCell>
               <TableCell key={character.id}>{character.name}</TableCell>
               <TableCell key={character.id}>
-                <Link href={characterLink}>{character.uuid}</Link>
+                <Button asChild>
+                  <Link className="blue" href={characterLink}>
+                    Link to character: {character.name}
+                  </Link>
+                </Button>
               </TableCell>
             </TableRow>
           );

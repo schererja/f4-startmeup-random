@@ -4,7 +4,6 @@ import { specialsRouter } from "~/server/api/routers/special";
 import { traitsRouter } from "~/server/api/routers/trait";
 import { locationsRouter } from "./routers/location";
 import { jobsRouter } from "./routers/job";
-import { stripVTControlCharacters } from "util";
 
 /**
  * This is the primary router for your server.

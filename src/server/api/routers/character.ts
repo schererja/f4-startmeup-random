@@ -52,7 +52,7 @@ export const characterRouter = createTRPCRouter({
         .input(z.object({ uuid: z.string() }))
         .query(async ({ ctx, input }) => {
 
-            let character = await ctx.db.query.characters.findFirst({
+            const character = await ctx.db.query.characters.findFirst({
 
                 where: (users, { eq }) => eq(users.uuid, input.uuid),
 
@@ -76,7 +76,7 @@ export const characterRouter = createTRPCRouter({
                 where: (locations, { eq }) => eq(locations.uuid, locationUUID),
             })
 
-            let returnCharacter = {
+            const returnCharacter = {
                 character: character,
                 specialStats: characterStats,
                 job: job,

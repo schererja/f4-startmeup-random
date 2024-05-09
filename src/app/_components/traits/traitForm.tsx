@@ -11,7 +11,6 @@ import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,18 +25,19 @@ const formSchema = z.object({
 });
 
 export function TraitForm() {
-  const { isSignedIn, sessionId, userId } = useAuth();
+  const { isSignedIn, userId } = useAuth();
 
-  if (isSignedIn && userId !== "user_2fkxhXmMfx2RdGSRFLPaG0qEInV") {
-    return (
-      <div>
-        <h1>You are not authorized to add to Traits</h1>
-      </div>
-    );
-  }
   const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+    },
+  });
   const createTrait = api.traits.create.useMutation({
     onSuccess: () => {
       router.refresh();
@@ -48,15 +48,14 @@ export function TraitForm() {
       console.log(error);
     },
   });
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-    },
-  });
 
+  if (isSignedIn && userId !== "user_2fkxhXmMfx2RdGSRFLPaG0qEInV") {
+    return (
+      <div>
+        <h1>You are not authorized to add to Traits</h1>
+      </div>
+    );
+  }
   return (
     <Form {...form}>
       <form

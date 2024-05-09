@@ -1,6 +1,4 @@
-import { TraitForm } from "../_components/traits/traitForm";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
-import { TraitTable } from "../_components/traits/traitsTable";
 import { LocationForm } from "../_components/locations/locationForm";
 import { LocationsTable } from "../_components/locations/locationsTable";
 

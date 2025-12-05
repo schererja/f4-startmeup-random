@@ -20,92 +20,109 @@ import {
  */
 export const createTable = pgTableCreator((name) => `f4sr_${name}`);
 
-
-
 export const jobs = createTable(
   "jobs",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
+    updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+    uuid: uuid("uuid")
+      .default(sql`gen_random_uuid()`)
+      .notNull()
+      .unique(),
   },
   (job) => ({
-    nameIndex: index("job_name_idx").on(job.name)
+    nameIndex: index("job_name_idx").on(job.name),
   }),
-)
+);
 
 export const traits = createTable(
   "traits",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
     description: varchar("description", { length: 1024 }),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
+    updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+    uuid: uuid("uuid")
+      .default(sql`gen_random_uuid()`)
+      .notNull()
+      .unique(),
   },
   (traits) => ({
     nameIndex: index("traits_name_idx").on(traits.name),
-  })
-)
+  }),
+);
 
 export const locations = createTable(
   "locations",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
     description: varchar("description", { length: 1024 }),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
+    updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+    uuid: uuid("uuid")
+      .default(sql`gen_random_uuid()`)
+      .notNull()
+      .unique(),
   },
   (location) => ({
     nameIndex: index("location_name_idx").on(location.name),
-  })
-)
-export const specialStats = createTable(
-  "specials",
-  {
-    id: serial("id").primaryKey(),
-    strength: integer("strength"),
-    perception: integer("perception"),
-    endurance: integer("endurance"),
-    charisma: integer("charisma"),
-    intelligence: integer("intelligence"),
-    agility: integer("agility"),
-    luck: integer("luck"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`).unique(),
-    createdAt: timestamp("created_at")
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt"),
-  }
-)
+  }),
+);
+export const specialStats = createTable("specials", {
+  id: serial("id").primaryKey(),
+  strength: integer("strength").notNull(),
+  perception: integer("perception").notNull(),
+  endurance: integer("endurance").notNull(),
+  charisma: integer("charisma").notNull(),
+  intelligence: integer("intelligence").notNull(),
+  agility: integer("agility").notNull(),
+  luck: integer("luck").notNull(),
+  uuid: uuid("uuid")
+    .default(sql`gen_random_uuid()`)
+    .notNull()
+    .unique(),
+  createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+});
 export const characters = createTable(
   "characters",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updatedAt"),
-    uuid: uuid("uuid").default(sql`gen_random_uuid()`),
-    specialStats: uuid("specialStatsUUID").references(() => specialStats.uuid),
-    jobsUUID: uuid("jobsUUID").references(() => jobs.uuid),
-    traitsUUID: uuid("traitsUUID").references(() => traits.uuid),
-    locationsUUID: uuid("locationsUUID").references(() => locations.uuid),
-
+    updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+    uuid: uuid("uuid")
+      .default(sql`gen_random_uuid()`)
+      .notNull()
+      .unique(),
+    specialStats: uuid("specialStatsUUID")
+      .references(() => specialStats.uuid)
+      .notNull(),
+    jobsUUID: uuid("jobsUUID")
+      .references(() => jobs.uuid)
+      .notNull(),
+    traitsUUID: uuid("traitsUUID")
+      .references(() => traits.uuid)
+      .notNull(),
+    locationsUUID: uuid("locationsUUID")
+      .references(() => locations.uuid)
+      .notNull(),
   },
   (character) => ({
     nameIndex: index("character_name_idx").on(character.name),
-  })
-)
+  }),
+);

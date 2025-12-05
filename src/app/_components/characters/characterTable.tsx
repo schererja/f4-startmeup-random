@@ -13,33 +13,42 @@ import { api } from "~/trpc/server";
 
 export async function CharacterTable() {
   const characters = await api.characters.getAll();
+  
+  if (characters.length === 0) {
+    return (
+      <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
+        <p className="text-gray-600">No characters found. Create your first character to get started!</p>
+      </div>
+    );
+  }
+  
   return (
     <Table>
       <TableCaption>A list of your recent characters.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Id</TableHead>
-          <TableHead className="w-[100px]">Name</TableHead>
-          <TableHead className="w-[100px]">UUID</TableHead>
+          <TableHead className="w-[100px]">ID</TableHead>
+          <TableHead className="w-[200px]">Name</TableHead>
+          <TableHead className="w-[200px]">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {characters.map((character) => {
-          if (!character) {
-            return null;
-          }
           if (!character.uuid) {
             return null;
           }
           const characterLink = `/characters/${character.uuid}`;
           return (
-            <TableRow key={character.name}>
-              <TableCell key={character.id}>{character.id}</TableCell>
-              <TableCell key={character.id}>{character.name}</TableCell>
-              <TableCell key={character.id}>
+            <TableRow key={character.uuid}>
+              <TableCell>{character.id}</TableCell>
+              <TableCell className="font-medium">{character.name}</TableCell>
+              <TableCell>
                 <Button asChild>
-                  <Link className="blue" href={characterLink}>
-                    Link to character: {character.name}
+                  <Link 
+                    href={characterLink}
+                    aria-label={`View details for ${character.name}`}
+                  >
+                    View Character
                   </Link>
                 </Button>
               </TableCell>

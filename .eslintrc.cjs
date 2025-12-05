@@ -24,10 +24,11 @@ const config = {
       "warn",
       {
         argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
       },
     ],
     "@typescript-eslint/require-await": "off",
-    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-misused-promises": [
       "error",
       {
@@ -36,6 +37,9 @@ const config = {
         },
       },
     ],
+    "@typescript-eslint/no-unnecessary-condition": "warn",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/await-thenable": "error",
     "drizzle/enforce-delete-with-where": [
       "error",
       {

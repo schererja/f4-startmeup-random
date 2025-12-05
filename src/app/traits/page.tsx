@@ -2,6 +2,8 @@ import { TraitForm } from "../_components/traits/traitForm";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { TraitTable } from "../_components/traits/traitsTable";
 
+export const dynamic = "force-dynamic";
+
 export default async function TraitsPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-amber-50">

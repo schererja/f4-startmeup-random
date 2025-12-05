@@ -2,6 +2,8 @@ import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { JobsForm } from "../_components/jobs/jobsForm";
 import { JobsTable } from "../_components/jobs/jobsTable";
 
+export const dynamic = "force-dynamic";
+
 export default async function JobsPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-amber-50">

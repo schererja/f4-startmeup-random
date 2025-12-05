@@ -2,6 +2,8 @@ import { CharacterTable } from "../_components/characters/characterTable";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   return (
     <main className="flex min-h-screen flex-col bg-slate-950 text-amber-50">

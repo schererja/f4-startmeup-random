@@ -2,6 +2,8 @@ import { api } from "~/trpc/server";
 import { DataTable, columns } from "../_components/specials/specialsTable";
 import { SignedOut, SignedIn } from "@clerk/nextjs";
 
+export const dynamic = "force-dynamic";
+
 export default async function SpecialsPage() {
   const data = await api.specials.getAll();
   return (

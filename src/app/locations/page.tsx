@@ -2,6 +2,8 @@ import { SignedOut, SignedIn } from "@clerk/nextjs";
 import { LocationForm } from "../_components/locations/locationForm";
 import { LocationsTable } from "../_components/locations/locationsTable";
 
+export const dynamic = "force-dynamic";
+
 export default async function LocationsPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-amber-50">

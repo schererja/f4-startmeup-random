@@ -12,16 +12,31 @@ import {
 import { api } from "~/trpc/server";
 
 export async function CharacterTable() {
-  const characters = await api.characters.getAll();
-  
-  if (characters.length === 0) {
+  let characters = [];
+
+  try {
+    characters = await api.characters.getAll();
+  } catch (error) {
+    console.error("Failed to fetch characters:", error);
     return (
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-        <p className="text-gray-600">No characters found. Create your first character to get started!</p>
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
+          Unable to load characters. Please try again later.
+        </p>
       </div>
     );
   }
-  
+
+  if (characters.length === 0) {
+    return (
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
+          No characters found. Create your first character to get started!
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Table>
       <TableCaption>A list of your recent characters.</TableCaption>
@@ -44,7 +59,7 @@ export async function CharacterTable() {
               <TableCell className="font-medium">{character.name}</TableCell>
               <TableCell>
                 <Button asChild>
-                  <Link 
+                  <Link
                     href={characterLink}
                     aria-label={`View details for ${character.name}`}
                   >

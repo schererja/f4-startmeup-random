@@ -10,12 +10,25 @@ import {
 import { api } from "~/trpc/server";
 
 export async function JobsTable() {
-  const jobs = await api.jobs.getAll();
+  let jobs = [];
+  
+  try {
+    jobs = await api.jobs.getAll();
+  } catch (error) {
+    console.error("Failed to fetch jobs:", error);
+    return (
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
+          Unable to load jobs. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   if (jobs.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-        <p className="text-gray-600">
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
           No jobs found. Create your first job to get started!
         </p>
       </div>

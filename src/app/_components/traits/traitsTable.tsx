@@ -10,12 +10,25 @@ import {
 import { api } from "~/trpc/server";
 
 export async function TraitTable() {
-  const traits = await api.traits.getAll();
+  let traits = [];
+  
+  try {
+    traits = await api.traits.getAll();
+  } catch (error) {
+    console.error("Failed to fetch traits:", error);
+    return (
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
+          Unable to load traits. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   if (traits.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-        <p className="text-gray-600">
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
           No traits found. Create your first trait to get started!
         </p>
       </div>
@@ -42,7 +55,7 @@ export async function TraitTable() {
             <TableRow key={trait.uuid}>
               <TableCell>{trait.id}</TableCell>
               <TableCell className="font-medium">{trait.name}</TableCell>
-              <TableCell className="text-gray-700">
+              <TableCell className="text-amber-100">
                 {trait.description}
               </TableCell>
               <TableCell className="font-mono text-sm">{trait.uuid}</TableCell>

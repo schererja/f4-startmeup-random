@@ -10,12 +10,25 @@ import {
 import { api } from "~/trpc/server";
 
 export async function LocationsTable() {
-  const locations = await api.locations.getAll();
+  let locations = [];
+  
+  try {
+    locations = await api.locations.getAll();
+  } catch (error) {
+    console.error("Failed to fetch locations:", error);
+    return (
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
+          Unable to load locations. Please try again later.
+        </p>
+      </div>
+    );
+  }
 
   if (locations.length === 0) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-        <p className="text-gray-600">
+      <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
+        <p className="text-amber-100">
           No locations found. Create your first location to get started!
         </p>
       </div>

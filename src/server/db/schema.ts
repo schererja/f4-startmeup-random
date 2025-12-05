@@ -101,6 +101,7 @@ export const characters = createTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
+    userId: varchar("userId", { length: 256 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -124,5 +125,6 @@ export const characters = createTable(
   },
   (character) => ({
     nameIndex: index("character_name_idx").on(character.name),
+    userIdIndex: index("character_userId_idx").on(character.userId),
   }),
 );

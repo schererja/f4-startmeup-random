@@ -1,11 +1,16 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+} from "~/server/api/trpc";
 import { characters, specialStats } from "~/server/db/schema";
 
 export const characterRouter = createTRPCRouter({
-  create: publicProcedure
+  create: protectedProcedure
     .input(
       z.object({
         name: z.string().min(1).max(256),
@@ -58,6 +63,7 @@ export const characterRouter = createTRPCRouter({
         .insert(characters)
         .values({
           name: input.name,
+          userId: ctx.userId,
           specialStats: statsRecord.uuid,
           jobsUUID: input.job.uuid,
           traitsUUID: input.trait.uuid,
@@ -124,8 +130,9 @@ export const characterRouter = createTRPCRouter({
         location,
       };
     }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.query.characters.findMany({
+      where: eq(characters.userId, ctx.userId),
       orderBy: (characters, { desc }) => [desc(characters.createdAt)],
     });
   }),

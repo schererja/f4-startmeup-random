@@ -133,8 +133,9 @@ export function CharacterForm({ traits, locations, jobs }: Props) {
 
     while (pointsToDistribute > 0) {
       const randomIndex = Math.floor(Math.random() * 7);
-      if (stats[randomIndex]! < 10) {
-        stats[randomIndex]++;
+      const currentValue = stats[randomIndex];
+      if (currentValue !== undefined && currentValue < 10) {
+        stats[randomIndex] = currentValue + 1;
         pointsToDistribute--;
       }
     }

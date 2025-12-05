@@ -16,7 +16,7 @@ export default async function JobsPage() {
             <div>
               <h1 className="text-4xl font-bold text-amber-100">Jobs</h1>
               <p className="mt-1 text-sm text-amber-500">
-                Choose your character's profession and skills
+                Choose your character&apos;s profession and skills
               </p>
             </div>
             {await JobsTable()}

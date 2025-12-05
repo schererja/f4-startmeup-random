@@ -16,7 +16,7 @@ export default async function TraitsPage() {
             <div>
               <h1 className="text-4xl font-bold text-amber-100">Traits</h1>
               <p className="mt-1 text-sm text-amber-500">
-                Select your character's defining characteristics
+                Select your character&apos;s defining characteristics
               </p>
             </div>
             {await TraitTable()}

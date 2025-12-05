@@ -11,7 +11,7 @@ import { api } from "~/trpc/server";
 
 export async function JobsTable() {
   let jobs = [];
-  
+
   try {
     jobs = await api.jobs.getAll();
   } catch (error) {
@@ -36,29 +36,29 @@ export async function JobsTable() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of available jobs.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead className="w-[200px]">Name</TableHead>
-          <TableHead className="w-[300px]">UUID</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {jobs.map((job) => {
-          if (!job.uuid) {
-            return null;
-          }
-          return (
-            <TableRow key={job.uuid}>
-              <TableCell>{job.id}</TableCell>
-              <TableCell className="font-medium">{job.name}</TableCell>
-              <TableCell className="font-mono text-sm">{job.uuid}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="overflow-x-auto rounded-lg border border-amber-600/30 bg-slate-900/50">
+      <Table>
+        <TableCaption>A list of available jobs.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[200px]">Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {jobs.map((job) => {
+            if (!job.uuid) {
+              return null;
+            }
+            return (
+              <TableRow key={job.uuid}>
+                <TableCell>{job.id}</TableCell>
+                <TableCell className="font-medium">{job.name}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

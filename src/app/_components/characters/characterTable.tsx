@@ -42,39 +42,41 @@ export async function CharacterTable() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of your recent characters.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead className="w-[200px]">Name</TableHead>
-          <TableHead className="w-[200px]">Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {characters.map((character) => {
-          if (!character.uuid) {
-            return null;
-          }
-          const characterLink = `/characters/${character.uuid}`;
-          return (
-            <TableRow key={character.uuid}>
-              <TableCell>{character.id}</TableCell>
-              <TableCell className="font-medium">{character.name}</TableCell>
-              <TableCell>
-                <Button asChild>
-                  <Link
-                    href={characterLink}
-                    aria-label={`View details for ${character.name}`}
-                  >
-                    View Character
-                  </Link>
-                </Button>
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="overflow-x-auto rounded-lg border border-amber-600/30 bg-slate-900/50">
+      <Table>
+        <TableCaption>A list of your recent characters.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[200px]">Name</TableHead>
+            <TableHead className="w-[200px]">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {characters.map((character) => {
+            if (!character.uuid) {
+              return null;
+            }
+            const characterLink = `/characters/${character.uuid}`;
+            return (
+              <TableRow key={character.uuid}>
+                <TableCell>{character.id}</TableCell>
+                <TableCell className="font-medium">{character.name}</TableCell>
+                <TableCell>
+                  <Button asChild className="text-xs sm:text-sm">
+                    <Link
+                      href={characterLink}
+                      aria-label={`View details for ${character.name}`}
+                    >
+                      View Character
+                    </Link>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

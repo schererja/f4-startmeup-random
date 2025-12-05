@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
 
 import {
   createTRPCRouter,
@@ -132,7 +131,7 @@ export const characterRouter = createTRPCRouter({
     }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.query.characters.findMany({
-      where: eq(characters.userId, ctx.userId),
+      where: (characters, { eq }) => eq(characters.userId, ctx.userId),
       orderBy: (characters, { desc }) => [desc(characters.createdAt)],
     });
   }),

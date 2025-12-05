@@ -11,7 +11,7 @@ import { api } from "~/trpc/server";
 
 export async function LocationsTable() {
   let locations = [];
-  
+
   try {
     locations = await api.locations.getAll();
   } catch (error) {
@@ -36,31 +36,29 @@ export async function LocationsTable() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of available locations.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead className="w-[200px]">Name</TableHead>
-          <TableHead className="w-[300px]">UUID</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {locations.map((location) => {
-          if (!location.uuid) {
-            return null;
-          }
-          return (
-            <TableRow key={location.uuid}>
-              <TableCell>{location.id}</TableCell>
-              <TableCell className="font-medium">{location.name}</TableCell>
-              <TableCell className="font-mono text-sm">
-                {location.uuid}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="overflow-x-auto rounded-lg border border-amber-600/30 bg-slate-900/50">
+      <Table>
+        <TableCaption>A list of available locations.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[200px]">Name</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {locations.map((location) => {
+            if (!location.uuid) {
+              return null;
+            }
+            return (
+              <TableRow key={location.uuid}>
+                <TableCell>{location.id}</TableCell>
+                <TableCell className="font-medium">{location.name}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

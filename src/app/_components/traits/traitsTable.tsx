@@ -11,7 +11,7 @@ import { api } from "~/trpc/server";
 
 export async function TraitTable() {
   let traits = [];
-  
+
   try {
     traits = await api.traits.getAll();
   } catch (error) {
@@ -36,33 +36,33 @@ export async function TraitTable() {
   }
 
   return (
-    <Table>
-      <TableCaption>A list of available traits.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead className="w-[200px]">Name</TableHead>
-          <TableHead className="w-[300px]">Description</TableHead>
-          <TableHead className="w-[200px]">UUID</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {traits.map((trait) => {
-          if (!trait.uuid) {
-            return null;
-          }
-          return (
-            <TableRow key={trait.uuid}>
-              <TableCell>{trait.id}</TableCell>
-              <TableCell className="font-medium">{trait.name}</TableCell>
-              <TableCell className="text-amber-100">
-                {trait.description}
-              </TableCell>
-              <TableCell className="font-mono text-sm">{trait.uuid}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="overflow-x-auto rounded-lg border border-amber-600/30 bg-slate-900/50">
+      <Table>
+        <TableCaption>A list of available traits.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead className="w-[200px]">Name</TableHead>
+            <TableHead className="w-[300px]">Description</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {traits.map((trait) => {
+            if (!trait.uuid) {
+              return null;
+            }
+            return (
+              <TableRow key={trait.uuid}>
+                <TableCell>{trait.id}</TableCell>
+                <TableCell className="font-medium">{trait.name}</TableCell>
+                <TableCell className="text-amber-100">
+                  {trait.description}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

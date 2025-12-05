@@ -17,12 +17,16 @@ export async function CharacterTable() {
   try {
     characters = await api.characters.getAll();
   } catch (error) {
-    console.error("Failed to fetch characters:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("Failed to fetch characters:", errorMessage);
     return (
       <div className="rounded-lg border border-amber-600/30 bg-slate-900/50 p-8 text-center">
         <p className="text-amber-100">
           Unable to load characters. Please try again later.
         </p>
+        {process.env.NODE_ENV === "development" && (
+          <p className="mt-2 text-xs text-amber-600">{errorMessage}</p>
+        )}
       </div>
     );
   }

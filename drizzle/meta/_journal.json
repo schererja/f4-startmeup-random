@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1764910518159,
+      "tag": "0000_tense_terrax",
+      "breakpoints": true
+    }
+  ]
+}

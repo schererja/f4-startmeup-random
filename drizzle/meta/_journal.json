@@ -15,6 +15,13 @@
       "when": 1764912076048,
       "tag": "0001_flaky_stepford_cuckoos",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1765033952842,
+      "tag": "0002_aspiring_enchantress",
+      "breakpoints": true
     }
   ]
 }

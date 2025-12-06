@@ -26,6 +26,12 @@ export function TopNav() {
           </SignedOut>
           <SignedIn>
             <Link
+              href="/dashboard"
+              className="pb-1 text-amber-100 transition hover:border-b-2 hover:border-amber-500 hover:text-amber-50"
+            >
+              Dashboard
+            </Link>
+            <Link
               href="/characters"
               className="pb-1 text-amber-100 transition hover:border-b-2 hover:border-amber-500 hover:text-amber-50"
             >
@@ -55,6 +61,8 @@ export function TopNav() {
             >
               Specials
             </Link>
+          </SignedIn>
+          <SignedIn>
             <div className="border-l border-amber-600/30 pl-8">
               <UserButton />
             </div>
@@ -98,6 +106,13 @@ export function TopNav() {
         <SignedIn>
           <div className="border-t border-amber-600/30 bg-slate-900 md:hidden">
             <div className="flex flex-col space-y-1 px-4 py-3">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded px-3 py-2 text-amber-100 transition hover:bg-amber-600/20 hover:text-amber-50"
+              >
+                Dashboard
+              </Link>
               <Link
                 href="/characters"
                 onClick={() => setMobileMenuOpen(false)}

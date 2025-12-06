@@ -47,6 +47,7 @@ export const characterRouter = createTRPCRouter({
           intelligence: input.specialStats.intelligence,
           agility: input.specialStats.agility,
           luck: input.specialStats.luck,
+          userId: ctx.userId,
         })
         .returning();
 
@@ -134,5 +135,134 @@ export const characterRouter = createTRPCRouter({
       where: (characters, { eq }) => eq(characters.userId, ctx.userId),
       orderBy: (characters, { desc }) => [desc(characters.createdAt)],
     });
+  }),
+  getStats: protectedProcedure.query(async ({ ctx }) => {
+    const userCharacters = await ctx.db.query.characters.findMany({
+      where: (characters, { eq }) => eq(characters.userId, ctx.userId),
+    });
+
+    const characterCount = userCharacters.length;
+
+    // Get all special stats for user's characters
+    const allSpecialStats = await Promise.all(
+      userCharacters.map(async (char) => {
+        return ctx.db.query.specialStats.findFirst({
+          where: (specialStats, { eq }) =>
+            eq(specialStats.uuid, char.specialStats),
+        });
+      }),
+    );
+
+    // Calculate average SPECIAL stats
+    const validStats = allSpecialStats.filter((stat) => stat !== undefined);
+    const avgStats =
+      validStats.length > 0
+        ? {
+            strength: Math.round(
+              validStats.reduce((sum, stat) => sum + (stat.strength ?? 0), 0) /
+                validStats.length,
+            ),
+            perception: Math.round(
+              validStats.reduce(
+                (sum, stat) => sum + (stat.perception ?? 0),
+                0,
+              ) / validStats.length,
+            ),
+            endurance: Math.round(
+              validStats.reduce((sum, stat) => sum + (stat.endurance ?? 0), 0) /
+                validStats.length,
+            ),
+            charisma: Math.round(
+              validStats.reduce((sum, stat) => sum + (stat.charisma ?? 0), 0) /
+                validStats.length,
+            ),
+            intelligence: Math.round(
+              validStats.reduce(
+                (sum, stat) => sum + (stat.intelligence ?? 0),
+                0,
+              ) / validStats.length,
+            ),
+            agility: Math.round(
+              validStats.reduce((sum, stat) => sum + (stat.agility ?? 0), 0) /
+                validStats.length,
+            ),
+            luck: Math.round(
+              validStats.reduce((sum, stat) => sum + (stat.luck ?? 0), 0) /
+                validStats.length,
+            ),
+          }
+        : null;
+
+    // Get most used traits, jobs, locations
+    const traitCounts = new Map<string, number>();
+    const jobCounts = new Map<string, number>();
+    const locationCounts = new Map<string, number>();
+
+    userCharacters.forEach((char) => {
+      traitCounts.set(
+        char.traitsUUID,
+        (traitCounts.get(char.traitsUUID) ?? 0) + 1,
+      );
+      jobCounts.set(char.jobsUUID, (jobCounts.get(char.jobsUUID) ?? 0) + 1);
+      locationCounts.set(
+        char.locationsUUID,
+        (locationCounts.get(char.locationsUUID) ?? 0) + 1,
+      );
+    });
+
+    // Get the most popular trait, job, and location
+    const mostUsedTraitUuid =
+      traitCounts.size > 0
+        ? [...traitCounts.entries()].reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+        : null;
+    const mostUsedJobUuid =
+      jobCounts.size > 0
+        ? [...jobCounts.entries()].reduce((a, b) => (a[1] > b[1] ? a : b))[0]
+        : null;
+    const mostUsedLocationUuid =
+      locationCounts.size > 0
+        ? [...locationCounts.entries()].reduce((a, b) =>
+            a[1] > b[1] ? a : b,
+          )[0]
+        : null;
+
+    const [mostUsedTrait, mostUsedJob, mostUsedLocation] = await Promise.all([
+      mostUsedTraitUuid
+        ? ctx.db.query.traits.findFirst({
+            where: (traits, { eq }) => eq(traits.uuid, mostUsedTraitUuid),
+          })
+        : null,
+      mostUsedJobUuid
+        ? ctx.db.query.jobs.findFirst({
+            where: (jobs, { eq }) => eq(jobs.uuid, mostUsedJobUuid),
+          })
+        : null,
+      mostUsedLocationUuid
+        ? ctx.db.query.locations.findFirst({
+            where: (locations, { eq }) =>
+              eq(locations.uuid, mostUsedLocationUuid),
+          })
+        : null,
+    ]);
+
+    return {
+      characterCount,
+      averageStats: avgStats,
+      mostUsedTrait: mostUsedTrait
+        ? {
+            name: mostUsedTrait.name,
+            count: traitCounts.get(mostUsedTraitUuid!),
+          }
+        : null,
+      mostUsedJob: mostUsedJob
+        ? { name: mostUsedJob.name, count: jobCounts.get(mostUsedJobUuid!) }
+        : null,
+      mostUsedLocation: mostUsedLocation
+        ? {
+            name: mostUsedLocation.name,
+            count: locationCounts.get(mostUsedLocationUuid!),
+          }
+        : null,
+    };
   }),
 });

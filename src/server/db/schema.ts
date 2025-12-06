@@ -78,24 +78,31 @@ export const locations = createTable(
     nameIndex: index("location_name_idx").on(location.name),
   }),
 );
-export const specialStats = createTable("specials", {
-  id: serial("id").primaryKey(),
-  strength: integer("strength").notNull(),
-  perception: integer("perception").notNull(),
-  endurance: integer("endurance").notNull(),
-  charisma: integer("charisma").notNull(),
-  intelligence: integer("intelligence").notNull(),
-  agility: integer("agility").notNull(),
-  luck: integer("luck").notNull(),
-  uuid: uuid("uuid")
-    .default(sql`gen_random_uuid()`)
-    .notNull()
-    .unique(),
-  createdAt: timestamp("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
-});
+export const specialStats = createTable(
+  "specials",
+  {
+    id: serial("id").primaryKey(),
+    strength: integer("strength").notNull(),
+    perception: integer("perception").notNull(),
+    endurance: integer("endurance").notNull(),
+    charisma: integer("charisma").notNull(),
+    intelligence: integer("intelligence").notNull(),
+    agility: integer("agility").notNull(),
+    luck: integer("luck").notNull(),
+    userId: varchar("userId", { length: 256 }).notNull(),
+    uuid: uuid("uuid")
+      .default(sql`gen_random_uuid()`)
+      .notNull()
+      .unique(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at").default(sql`CURRENT_TIMESTAMP`),
+  },
+  (special) => ({
+    userIdIndex: index("special_userId_idx").on(special.userId),
+  }),
+);
 export const characters = createTable(
   "characters",
   {

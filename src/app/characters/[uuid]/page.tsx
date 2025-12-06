@@ -1,6 +1,7 @@
 import { api } from "~/trpc/server";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { EditSpecialForm } from "./_components/editSpecialForm";
 
 export default async function Page({
   params,
@@ -190,64 +191,18 @@ export default async function Page({
                 <span className="text-amber-500">◆</span>
                 S.P.E.C.I.A.L. Stats
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Strength
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.strength}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Perception
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.perception}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Endurance
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.endurance}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Charisma
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.charisma}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Intelligence
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.intelligence}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Agility
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.agility}
-                  </p>
-                </div>
-                <div className="rounded-lg border border-amber-600/20 bg-slate-800/50 p-6 text-center transition hover:border-amber-600/40">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-amber-500">
-                    Luck
-                  </p>
-                  <p className="mt-3 text-5xl font-bold text-amber-100">
-                    {data.specialStats.luck}
-                  </p>
-                </div>
-              </div>
+              <EditSpecialForm
+                statsUuid={data.specialStats.uuid}
+                initialStats={{
+                  strength: data.specialStats.strength,
+                  perception: data.specialStats.perception,
+                  endurance: data.specialStats.endurance,
+                  charisma: data.specialStats.charisma,
+                  intelligence: data.specialStats.intelligence,
+                  agility: data.specialStats.agility,
+                  luck: data.specialStats.luck,
+                }}
+              />
             </div>
           </div>
         </div>

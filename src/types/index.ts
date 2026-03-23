@@ -6,6 +6,12 @@ import {
   type specialStats,
   type traits,
 } from "~/server/db/schema";
+import {
+  type d2Characters,
+  type d2Classes,
+  type d2Mercenaries,
+  type d2SkillFocuses,
+} from "~/server/db/schema-d2";
 
 // Infer types from the schema
 export type Character = InferSelectModel<typeof characters>;
@@ -21,6 +27,27 @@ export type FullCharacter = {
   job: Job;
   trait: Trait;
   location: Location;
+};
+
+// D2 types
+export type D2Character = InferSelectModel<typeof d2Characters>;
+export type D2Class = InferSelectModel<typeof d2Classes>;
+export type D2Mercenary = InferSelectModel<typeof d2Mercenaries>;
+export type D2SkillFocus = InferSelectModel<typeof d2SkillFocuses>;
+
+export type FullD2Character = {
+  character: D2Character;
+  class: D2Class;
+  mercenary: D2Mercenary | null;
+  skillFocuses: D2SkillFocus[];
+};
+
+export type CreateD2CharacterInput = {
+  name: string;
+  classUUID: string;
+  mercenaryUUID?: string;
+  difficulty: "Normal" | "Nightmare" | "Hell";
+  startingAct: 1 | 2 | 3 | 4 | 5;
 };
 
 // Input types for creating entities

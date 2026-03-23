@@ -4,6 +4,8 @@ import { specialsRouter } from "~/server/api/routers/special";
 import { traitsRouter } from "~/server/api/routers/trait";
 import { locationsRouter } from "./routers/location";
 import { jobsRouter } from "./routers/job";
+import { d2CharacterRouter } from "./routers/d2Character";
+import { d2GameDataRouter } from "./routers/d2GameData";
 
 /**
  * This is the primary router for your server.
@@ -15,7 +17,9 @@ export const appRouter = createTRPCRouter({
   specials: specialsRouter,
   traits: traitsRouter,
   locations: locationsRouter,
-  jobs: jobsRouter
+  jobs: jobsRouter,
+  d2Characters: d2CharacterRouter,
+  d2GameData: d2GameDataRouter,
 });
 
 // export type definition of API

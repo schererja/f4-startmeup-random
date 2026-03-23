@@ -1,0 +1,23 @@
+{
+  "assignment_cast_snapshots": {
+    "repl-cast-2026-03-23T21:56:14.964Z": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "agents": [
+        "tyrael",
+        "deckard cain",
+        "baal",
+        "mephisto",
+        "diablo",
+        "scribe",
+        "ralph"
+      ],
+      "universe": "Diablo 2"
+    }
+  },
+  "universe_usage_history": [
+    {
+      "universe": "Diablo 2",
+      "used_at": "2026-03-23T21:56:14.964Z"
+    }
+  ]
+}

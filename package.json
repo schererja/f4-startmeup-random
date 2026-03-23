@@ -13,7 +13,8 @@
     "start": "next start",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "db:seed:d2": "dotenv -e .env -- tsx src/server/db/seed-d2.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.5",

@@ -1,0 +1,147 @@
+/* Pip-Boy / CRT animations for OBS overlays */
+
+@keyframes scanline {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.92;
+  }
+  43% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 0.94;
+  }
+  77% {
+    opacity: 1;
+  }
+}
+
+@keyframes pipboy-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes terminal-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.4), 0 0 12px rgba(76, 175, 80, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.7), 0 0 20px rgba(76, 175, 80, 0.4);
+  }
+}
+
+/* Scanline overlay effect applied via ::after pseudo-element */
+.obs-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.obs-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Flicker effect on the element itself */
+.obs-flicker {
+  animation: flicker 4s infinite;
+}
+
+/* FadeIn for overlay cards appearing */
+.obs-fadein {
+  animation: pipboy-fadeIn 0.6s ease-out forwards;
+}
+
+/* Glow pulse on stat boxes */
+.obs-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Terminal cursor blink */
+.obs-cursor::after {
+  content: "█";
+  animation: terminal-blink 1s step-end infinite;
+}
+
+/* ── Diablo 2 keyframes ── */
+
+@keyframes d2-ember-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 6px rgba(139, 0, 0, 0.5),
+      0 0 14px rgba(200, 150, 44, 0.2),
+      inset 0 0 40px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 12px rgba(139, 0, 0, 0.8),
+      0 0 28px rgba(200, 150, 44, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes d2-fade-in {
+  from {
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+  }
+  to {
+    opacity: 1;
+    background-color: transparent;
+  }
+}
+
+/* Ember glow border pulse — D2 card variant */
+.d2-ember-glow {
+  animation: d2-ember-glow 3.5s ease-in-out infinite;
+}
+
+/* Dark fade-in for D2 overlay appear */
+.d2-fade-in {
+  animation: d2-fade-in 0.8s ease-out forwards;
+}

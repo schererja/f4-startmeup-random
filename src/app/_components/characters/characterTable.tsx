@@ -57,7 +57,7 @@ export async function CharacterTable() {
             if (!character.uuid) {
               return null;
             }
-            const characterLink = `/characters/${character.uuid}`;
+            const characterLink = `/fallout4/characters/${character.uuid}`;
             return (
               <TableRow key={character.uuid}>
                 <TableCell>{character.id}</TableCell>

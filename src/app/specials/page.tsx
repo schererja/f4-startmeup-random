@@ -1,33 +1,5 @@
-import { api } from "~/trpc/server";
-import { DataTable, columns } from "../_components/specials/specialsTable";
-import { SignedOut, SignedIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
-export default async function SpecialsPage() {
-  const data = await api.specials.getAll();
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-amber-50">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-8 sm:py-16">
-        <SignedOut>
-          <div className="h-full w-full text-center text-xl sm:text-2xl">
-            Please sign in above
-          </div>
-        </SignedOut>
-        <SignedIn>
-          <div className="w-full space-y-8">
-            <div>
-              <h1 className="text-3xl font-bold text-amber-100 sm:text-4xl">
-                Specials
-              </h1>
-              <p className="mt-1 text-sm text-amber-500">
-                View special perks and abilities
-              </p>
-            </div>
-            <DataTable columns={columns} data={data} />
-          </div>
-        </SignedIn>
-      </div>
-    </main>
-  );
+export default function Page() {
+  redirect("/fallout4/specials");
 }

@@ -84,3 +84,21 @@
     display: none;
   }
 }
+
+/* ── OBS Overlay utilities ───────────────────────────────────────────────────
+   These apply to pages served under the (overlay) route group.
+   Body must be transparent so OBS browser sources composite correctly.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.obs-transparent {
+  background-color: transparent !important;
+}
+
+/* Pip-Boy green palette */
+:root {
+  --pipboy-green: #4caf50;
+  --pipboy-green-bright: #00ff41;
+  --pipboy-green-dim: #1b5e20;
+  --pipboy-dark: rgba(0, 10, 5, 0.85);
+  --pipboy-border: rgba(76, 175, 80, 0.4);
+}

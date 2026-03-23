@@ -1,0 +1,46 @@
+{
+  "agents": {
+    "tyrael": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Tyrael",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "deckard cain": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Deckard Cain",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "baal": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Baal",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "mephisto": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Mephisto",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "diablo": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Diablo",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "scribe": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Scribe",
+      "universe": "Diablo 2",
+      "status": "active"
+    },
+    "ralph": {
+      "created_at": "2026-03-23T21:56:14.964Z",
+      "persistent_name": "Ralph",
+      "universe": "Diablo 2",
+      "status": "active"
+    }
+  }
+}

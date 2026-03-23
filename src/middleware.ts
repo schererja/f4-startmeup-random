@@ -1,9 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isProtectedRoute = createRouteMatcher(["/(.*)"]);
+// Overlay routes are intentionally public — OBS browser sources can't authenticate.
+const isPublicRoute = createRouteMatcher(["/overlay/(.*)"]);
 
 export default clerkMiddleware((auth, request) => {
-    if (isProtectedRoute(request)) auth().protect();
+  if (!isPublicRoute(request)) auth().protect();
 });
 
 // export const config = {

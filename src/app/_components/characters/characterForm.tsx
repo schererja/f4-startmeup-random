@@ -51,7 +51,7 @@ export function CharacterForm({ traits, locations, jobs }: Props) {
   const createCharacter = api.characters.create.useMutation({
     onSuccess: () => {
       toast.success("Character created successfully!");
-      router.push("/characters");
+      router.push("/fallout4/characters");
       router.refresh();
     },
     onError: (error) => {

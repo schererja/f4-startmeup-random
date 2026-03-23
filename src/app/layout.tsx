@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { TopNav } from "./_components/topnav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Fallout 4 Random Start Me Up",
-  description: "Generate random character builds for Fallout 4 Start Me Up mod",
+  title: "Start Me Up Random",
+  description: "Random character builds for Fallout 4 and Diablo II",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -28,10 +27,7 @@ export default function RootLayout({
         <body
           className={`min-h-screen bg-background font-sans antialiased ${inter.variable}`}
         >
-          <TopNav />
-          <main className="flex-1">
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </main>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>
       </html>
     </ClerkProvider>

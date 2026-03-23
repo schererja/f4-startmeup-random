@@ -1,8 +1,26 @@
-// TODO: Implement — migrate from src/app/locations/page.tsx
-export default function Page() {
+import { LocationForm } from "~/app/_components/locations/locationForm";
+import { LocationsTable } from "~/app/_components/locations/locationsTable";
+
+export const dynamic = "force-dynamic";
+
+export default async function Page() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-amber-50">
-      <p className="text-amber-500">{/* FO4 Locations — not yet implemented */}</p>
-    </main>
+    <div className="flex min-h-screen flex-col bg-slate-950 text-amber-50">
+      <div className="container flex flex-col gap-12 px-4 py-8 sm:py-16">
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-3xl font-bold text-amber-100 sm:text-4xl">
+              Locations
+            </h1>
+            <p className="mt-1 text-sm text-amber-500">
+              Discover the Wasteland
+            </p>
+          </div>
+          {await LocationsTable()}
+          <LocationForm />
+        </div>
+      </div>
+    </div>
   );
 }
+

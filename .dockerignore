@@ -1,0 +1,34 @@
+# Dependencies — reinstalled inside the image
+node_modules
+
+# Next.js build output
+.next
+
+# Version control
+.git
+.gitignore
+
+# Environment files — never bake secrets into the image
+.env
+.env.local
+.env.development
+.env.production
+# Keep .env.example so users know what vars are needed
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+.vscode
+.idea
+
+# Test artefacts
+coverage
+.nyc_output
+
+# TypeScript build info (regenerated during build)
+tsconfig.tsbuildinfo

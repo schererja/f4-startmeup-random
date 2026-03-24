@@ -1,0 +1,67 @@
+version: "3.9"
+
+# ── Named volumes ─────────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+
+services:
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: f4-startmeup-random
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d f4-startmeup-random"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Next.js app ─────────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Database — points to the 'db' service above
+      POSTGRES_URL: postgresql://postgres:password@db:5432/f4-startmeup-random
+
+      # Clerk — replace with your actual keys before running
+      # Get them from https://dashboard.clerk.com
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_replace_me
+      CLERK_SECRET_KEY: sk_test_replace_me
+
+      NODE_ENV: production
+
+# ── Database migration / seed helper ─────────────────────────────────────────
+# After first startup, run schema push and optional seed with:
+#
+#   docker compose run --rm -e POSTGRES_URL=postgresql://postgres:password@db:5432/f4-startmeup-random \
+#     app pnpm db:push
+#
+#   docker compose run --rm -e POSTGRES_URL=postgresql://postgres:password@db:5432/f4-startmeup-random \
+#     app pnpm db:seed
+#
+# Or add a one-shot 'migrate' service:
+#
+#   migrate:
+#     build: { context: ., dockerfile: Dockerfile }
+#     command: pnpm db:push
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#     environment:
+#       POSTGRES_URL: postgresql://postgres:password@db:5432/f4-startmeup-random
+#     profiles: ["migrate"]

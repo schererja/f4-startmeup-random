@@ -1,7 +1,7 @@
 # Squad Decisions Archive
 
-**Last Updated:** 2026-03-24T20:01:05Z  
-**Total Decisions:** 21
+**Last Updated:** 2026-03-24T20:25:54Z  
+**Total Decisions:** 23
 
 ---
 
@@ -87,17 +87,107 @@ Diablo 2 OBS overlay implemented at `src/app/(overlay)/overlay/diablo2/[uuid]/pa
 
 ---
 
-### Baal: Layout Reference Decision
-**Date:** 2025-01 | **Status:** Completed | **Scope:** Fallout 4 and Diablo 2 layout composition
+### Baal: Layout Reference Decision (UPDATED)
+**Date:** 2025-01 → 2026-03-24 | **Status:** Completed & Validated | **Scope:** Fallout 4 and Diablo 2 layout composition
 
-For next richer FO4 overlay pass, keep Pip-Boy card language but adopt anchored composition pattern instead of single panel.
+For next richer FO4 overlay pass, keep Pip-Boy card language but adopt anchored composition pattern instead of single panel. Layout reference pages (`localhost:3000/layout-fallout` and `localhost:3000/layout-diablo`) confirmed as positive design exemplars.
 
 **Key Decisions:**
-- **Composition Principle:** Top-left character identity, bottom-center SPECIAL strip, bottom status strip, reserved webcam area
+- **Composition Principle:** Anchored zone-based layout — top-left character identity, bottom-center SPECIAL strip (FO4) or status (D2), bottom status strip, reserved webcam area
 - **Why:** Separated information zones read faster on stream; leaves center of gameplay open
-- **Apply to D2:** Same anchored composition but no decorative metaphor copying; avoid fake health/mana orbs without data
+- **Apply to D2:** Same anchored composition but no decorative metaphor copying; avoid fake health/mana orbs without real character data
+- **Zone-Based Pattern Generality:** Explicit zone assignment (top-left, bottom-center, etc.) prevents layout surprise; use borders + spacing + position (not color alone) to survive gameplay collision
 
-**Rationale:** Local `layout-fallout` and `layout-diablo` references read faster; separating by zone outperforms single packed card.
+**FO4 Zones:** Top-left character (name, background, location, trait), bottom-center SPECIAL cards (7×88px), bottom-left webcam (480×270), full-width footer strip  
+**D2 Zones:** Top-left character panel (name, class, level), top-right status panel (act, difficulty), bottom-left/right orbs (90px circles with real HP/Mana), bottom-center webcam (400×225), full-width footer strip
+
+**FO4 Guidance:**
+- Keep: Pip-Boy card atoms, zone anchoring, single accent color (amber), monospace labels
+- Add: Explicit 2px borders around character info box; stat card scaling guards (≥72px in OBS)
+- Avoid: Relying on color alone for separation from gameplay; webcam label detachment
+
+**D2 Guidance:**
+- Keep: Corner panels with 2px gold borders; separated status surfaces; bottom-center webcam with gothic ornaments; difficulty color readiness
+- Replace: Hardcoded orbs with real HP/Mana stats from character data; apply difficulty color coding (green Normal, orange Nightmare, red Hell)
+- Add: Section dividers between character/mercenary/skill focuses; larger font sizes for broadcast scale (13px minimum)
+- Avoid: Decorative elements without live data binding
+
+**Rationale:** Local `layout-fallout` and `layout-diablo` references read faster; separating by zone outperforms single packed card. Zone-based pattern is game-agnostic and supports both titles with minimal refactoring.
+
+---
+
+### Deckard Cain: Overlay Layout Reference Mapping
+**Date:** 2026-03-24 | **Status:** Completed (Analysis) | **Scope:** Structural refactoring guide for FO4 and D2 overlays
+
+Detailed structural analysis comparing reference layouts against current single-card implementations. Identified file targets, new components, and utility functions needed for zone-based refactoring.
+
+**Key Findings:**
+- **Current Gap:** FO4 and D2 overlays use single centered cards (~520px max-width). References use anchored zones at 1920×1080.
+- **Pages to Refactor:** `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx`, `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx`
+
+**New Components Proposed:**
+- `CharacterPanel.tsx` (FO4 top-left, reusable base)
+- `SpecialBar.tsx` (FO4 centered bottom)
+- `FooterStrip.tsx` (Shared, game-aware badge styling)
+- `WebcamReserved.tsx` (Game-specific sizing)
+- `D2CharacterPanel.tsx` (D2 top-left variant)
+- `D2StatusPanel.tsx` (D2 top-right)
+- `D2OrbSection.tsx` (D2 bottom corners, data-bound)
+
+**Utilities:**
+- `src/app/(overlay)/_lib/zone-layout.ts` with constants (`WEBCAM_FO4`, `WEBCAM_D2`) and helpers
+- `src/app/(overlay)/_components/overlay-layout-grid.css` for zone positioning
+
+**Layout Query Param Reinterpretation:**
+- `minimal` = Character name only (top-left zone visible)
+- `stats` = Character + key stats (reduced zones, no footer)
+- `full` = All zones including footer and webcam reservation
+
+**Rationale:** Structural roadmap enables implementation teams to refactor overlays incrementally; components and utilities preserve zone consistency across games.
+
+---
+
+### Baal: Layout Reference Review
+**Date:** 2026-03-24 | **Status:** Completed | **Scope:** Design pattern validation and implementation risk mitigation
+
+Comprehensive strengths/risks analysis of both reference layouts. Established zone-based OBS composition as generalizable design pattern for both games.
+
+**FO4 Reference Strengths:**
+- Zone anchoring (top-left identity, bottom-center stats, status strip) prevents layout surprise
+- Single accent color (amber #f0a500) creates cohesion
+- Pip-Boy aesthetic (monospace labels, proportional values) reads fast even at small sizes
+- Bottom-center SPECIAL bar leaves center gameplay open for dungeon crawlers
+
+**FO4 Reference Risks:**
+- Stat card illegibility at scale (7 cards × 88px = 616px wide; blurs if browser <800px)
+- Character box visibility collision with light game UI at top-left
+- SPECIAL bar float-over unsupervised; workshop/inventory/dialogue collision at bottom-center
+- Webcam label detachment if OBS crops or scales
+
+**D2 Reference Strengths:**
+- Corner panels with explicit 2px gold borders create instant visual scannability
+- Separated status surfaces (top-left and top-right) distribute cognitive load
+- Bottom-center webcam perfectly centered for 16:9 frame balance
+- Gothic ornaments (corner L-shaped gold marks) add thematic flavor without overload
+- Monospace labels + serif name creates clear hierarchy
+- Structure ready for difficulty color coding (supports red/orange/green variants)
+
+**D2 Reference Risks:**
+- Hardcoded orbs without real HP/Mana data distract and feel fake to stream viewers
+- Top-right panel clipping risk (hidden by D2 UI effects at tight camera angles)
+- 12px monospace risky at broadcast scale if OBS downscales (recommend 13px minimum)
+- Webcam placement assumes centered gameplay; off-center angles cause occlusion
+
+**Design Pattern: Zone-Based OBS Composition**
+1. **Explicit zone assignment** (top-left, bottom-center, etc.) prevents surprise
+2. **Multi-layer separation** via borders + spacing + position (not color alone)
+3. **Reserved areas** (webcam frames) unambiguous; positioned away from typical game UI
+4. **Typography hierarchy** <1 second scanning time (monospace labels, size jumps for values)
+
+**Implementation Guidance:**
+- FO4: Spread card atoms into full-scene composition; add borders and label stability
+- D2: Keep sectioned structure; replace decorative elements with real character data
+- Both: Apply zone pattern; avoid color-only separation; ensure broadcast-safe font sizes
 
 ---
 
@@ -280,21 +370,22 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 | Category | Count | Status |
 |----------|-------|--------|
 | Architecture | 2 | Accepted / Implemented |
-| Overlay & Layout | 4 | Accepted / Implemented / Proposed |
+| Overlay & Layout | 6 | Accepted / Implemented / Proposed / Completed |
 | Diablo 2 | 4 | Implemented / Approved |
 | Docker | 6 | Approved / Rejected |
 | Data & Schema | 3 | Implemented / Approved |
 | Directives | 2 | Active |
-| **Total** | **21** | Mostly Accepted/Implemented; 1 Rejection |
+| **Total** | **23** | Mostly Accepted/Implemented; 1 Rejection |
 
 ---
 
 ## Decision Status Breakdown
 
 - **Accepted:** 8
-- **Implemented:** 6
+- **Implemented:** 7
 - **Proposed:** 1
 - **Approved:** 5
+- **Completed (Analysis):** 2
 - **Rejection:** 1 (Docker Postgres — critical library mismatch requiring specialist fix)
 - **Resolved:** Several ongoing items with followup work
 

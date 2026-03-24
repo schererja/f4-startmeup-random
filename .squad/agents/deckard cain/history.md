@@ -17,3 +17,6 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- Docker compose builds here depend on Docker Desktop's `docker-credential-desktop` helper being reachable on PATH; the binary already exists at `/Applications/Docker.app/Contents/Resources/bin/docker-credential-desktop` and a user-level symlink in `~/.local/bin/` restores public image pulls.
+- The project Dockerfile only uses standard syntax, so dropping the `# syntax=docker/dockerfile:1` directive avoids an extra frontend image lookup during builds.
+- Key Docker paths for local setup are `Dockerfile`, `docker-compose.yml`, and `.env.docker.example`; compose verification succeeded with `docker compose up --build --no-start app db`.

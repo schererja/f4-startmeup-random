@@ -51,6 +51,13 @@
 
 ## Learnings
 
+### Overlay Final Review (2026-03-25)
+- **Status:** APPROVED ✅ — Revised overlay refactor clears the acceptance gate
+- **Verification:** `pnpm test -- --run`, `SKIP_ENV_VALIDATION=1 pnpm lint`, and `SKIP_ENV_VALIDATION=1 pnpm build` all pass; remaining lint warnings are unrelated repo baseline noise.
+- **FO4 result:** `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx` now uses anchored zones, a reserved 480×270 webcam frame, a clear bottom-center SPECIAL rail, and null-safe detail-panel gating that no longer trips build/lint.
+- **D2 result:** `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx` keeps the gameplay center open with a bottom-center 400×225 webcam reserve, replaces fake HUD clutter with real-data status/mercenary/skill panels, and raises broadcast-facing labels to OBS-safe sizing.
+- **Reference handling:** Structural parity with `localhost:3000/layout-fallout` / `localhost:3000/layout-diablo` matters more than literal ornament copying; anchored zones plus real data beat decorative mimicry.
+- **Review path:** Overlay QA for this repo should keep checking anchored composition, explicit webcam dimensions, center-screen clearance, no fake telemetry, and broadcast-safe typography in the two overlay page files.
 ### Docker Credentials & Dockerfile Syntax
 - **docker-credential-desktop errors** are system config issues, not code bugs. Fix: remove `credsStore` from `~/.docker/config.json`.
 - **Dockerfile syntax directive (`# syntax=docker/dockerfile:1`) is critical** — must be first line. Without it, BuildKit features fail and builds become unreliable.
@@ -93,3 +100,32 @@
 - **Recommendation:** Assign to DB/ORM specialist to:
   - Use conditional client selection (pg for local, @vercel/postgres for Vercel), OR
   - Switch entirely to @neondatabase/serverless or pg library
+
+### Overlay Refactor Review (2026-03-25)
+- **Validation path:** `pnpm test -- --run` passes; `pnpm lint` is blocked by required env vars, and `SKIP_ENV_VALIDATION=1 pnpm lint` / `SKIP_ENV_VALIDATION=1 pnpm build` are the repo-safe way to surface real overlay regressions.
+- **Current blocker:** `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx` fails lint/build on `traitDescription || locationDescription`; use `??`-safe conditional logic when gating optional overlay zones.
+- **Broadcast rule:** D2 overlay labels below 13px are not stream-safe; `0.52rem`–`0.6rem` label text in `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx` is too small for the team’s own OBS readability guidance.
+- **Review targets:** `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx`, `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx`, plus local references `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo`.
+
+### Overlay Refactor Final Review (2026-03-25)
+- **Status:** COMPLETED — Final review published
+- **Decision:** ✅ APPROVED
+- **Review Points:**
+  1. FO4 detail-panel gate: ✅ Cleared (null-safe logic now in place)
+  2. D2 broadcast readability: ✅ Cleared (labels raised to ≥13px)
+- **Validated via:**
+  - `pnpm test -- --run` (full suite passing)
+  - `SKIP_ENV_VALIDATION=1 pnpm lint` (no new regressions)
+  - `SKIP_ENV_VALIDATION=1 pnpm build` (build succeeds)
+  - Reference pages stable (`localhost:3000/layout-fallout`, `localhost:3000/layout-diablo`)
+- **Architecture:** Anchored zones with explicit webcam reservations and gameplay center preservation confirmed
+- **Outcome:** No further revision this cycle; work ready to ship
+- **See:** `.squad/orchestration-log/2026-03-25T02:43:59Z-diablo.md` and `.squad/log/2026-03-25T02:43:59Z-overlay-approval.md`
+
+## Team Coordination (2026-03-25T02:43:59Z)
+
+**Session:** Overlay approval finalized
+**Cross-Agent Work:**
+- Deckard Cain revision → Diablo final review → Approved
+- Safe validation path established: `SKIP_ENV_VALIDATION=1` wrapper enables build/lint without environment blocker
+- User directive captured: GitHub issues may be used for tracking work (Jason Scherer, 2026-03-25)

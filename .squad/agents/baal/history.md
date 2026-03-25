@@ -16,6 +16,8 @@
 - D2 layout strength: explicit corner panels with gold borders (instantly scannable); aesthetic thematic ornaments; centered webcam. Weakness: hardcoded orbs distract without live HP/Mana data; top-right panel may clip in cramped scenes; small font sizes risky at broadcast scale.
 - Core principle: Use zone-based layout + explicit borders/spacing (not color alone) to survive dark/light game scene collisions. Make webcam areas unmistakable with frames and labels, positioned away from typical game UI corners.
 - **Zone-Based OBS Composition Pattern:** Explicit zone assignment (top-left, bottom-center, etc.) prevents layout surprise; borders + spacing + position (not color alone) survive gameplay collision; reserved areas unambiguous; typography hierarchy <1 second scanning time.
+- Fallout 4 overlay now anchors identity top-left, detail cards on the right edge, SPECIAL rail bottom-center, webcam reserve bottom-left, and a full-width status rail at the bottom using existing Pip-Boy atoms.
+- Diablo II overlay now uses a lighter anchored layout: top-left identity, top-right status, optional bottom edge panels for mercenary/skill focus, bottom-center webcam reserve, and a minimal footer strip with real character data only.
 
 ## Team Coordination (2026-03-24T20:25:54Z)
 

@@ -17,6 +17,7 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- 2026-03-25: Cleaner broadcast scenes land better when source-map guidance stays explicit but compressed—use short labels like `Editor source`/`Camera source`, keep helper sublabels to one brief line, and collapse param docs to a compact `name + example` panel in `src/app/(overlay)/_components/stream-scenes.tsx`.
 - 2026-03-25: For OBS-friendly browser scenes that frame external captures, replace decorative mock content with explicit source-target copy like “Real editor source goes here” or “Real camera source goes here,” and spell out the OBS layer order directly in the scene (`src/app/(overlay)/coding/page.tsx`, `src/app/(overlay)/full-cam/page.tsx`).
 - 2026-03-25: `SceneParamDocs` in `src/app/(overlay)/_components/stream-scenes.tsx` now supports `layout="static"` so setup docs can live inside a support rail instead of covering webcam/editor targets on dense scenes.
 - 2026-03-25: `src/app/(overlay)/coding/page.tsx` reads cleanest when the scene body uses one absolute wrapper with a reserved footer lane plus a two-column grid (`main workspace` + `right rail`) instead of individually positioned panels; nested rows keep the editor, terminal, narration rail, and webcam reserve from colliding.
@@ -153,3 +154,26 @@ Two-column grid with reserved footer stabilizes layout at common OBS/browser siz
 - Grid shell and transparent frame patterns ready for team reuse
 - Future scenes should adopt explicit source-target architecture
 - Scene composition principle now documented for scaling
+
+## Stream Scene Copy Cleanup (2026-03-25T20:36:00Z)
+
+**Session:** Copy cleanup orchestration — scribe session consolidation
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T20:36:00Z-scribe.md`
+**Session Log:** `.squad/log/2026-03-25T20:36:00Z-copy-cleanup.md`
+
+### Simplification Pass Completed
+- **Work:** Simplified streamer-scene and overlay wording for cleaner on-stream look
+- **Approach:** Kept source-map behavior but reduced explanatory text to short labels and brief helper copy
+- **Impact:** Compressed `SceneParamDocs` to subtler param/example panel; setup hints stay available without manual-like appearance
+- **Scope:** Touched shared scene shell, BRB, starting-soon, full-cam, coding, transition, Fallout 4 overlay, Diablo II overlay surfaces
+- **Decision:** Merged to `decisions.md` as "Deckard Cain: Stream Scene Copy Cleanup" (2026-03-25)
+
+### User Feedback Addressed
+- Jason Scherer observed extra text felt noisy and unnecessary
+- Team reduced nonessential copy while preserving functional UI structure
+- Source-map architecture remains intact, now more subtle
+
+### Next Steps
+- Review merged decision in team decisions.md
+- Scene copy baseline established for consistent UI voice
+- Overlay chrome now cleaner and production-ready

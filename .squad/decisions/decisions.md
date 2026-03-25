@@ -1,7 +1,7 @@
 # Squad Decisions Archive
 
-**Last Updated:** 2026-03-25T18:24:49Z  
-**Total Decisions:** 28
+**Last Updated:** 2026-03-25T20:36:00Z  
+**Total Decisions:** 30
 
 ---
 
@@ -457,6 +457,24 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 
 ---
 
+### Jason Scherer: Copy Cleanup Directive
+**Date:** 2026-03-25T20:29:01Z | **By:** Jason Scherer (via Copilot) | **Status:** Active
+
+Reduce the extra weird text across scenes and overlays; keep the UI cleaner with less unnecessary copy.
+
+**Impact:** Directs Deckard Cain's stream scene and overlay simplification pass.
+
+---
+
+### Deckard Cain: Stream Scene Copy Cleanup
+**Date:** 2026-03-25 | **Status:** Completed | **Scope:** Streamer scene and overlay UI simplification
+
+Simplified streamer-scene and overlay wording for a cleaner on-stream look. Kept source-map behavior, but reduced it to short labels and brief one-line helper copy. Compressed `SceneParamDocs` to a subtler param/example panel so setup hints stay available without reading like a manual on stream. Touched shared scene shell plus BRB, starting-soon, full-cam, coding, transition, Fallout 4 overlay, and Diablo II overlay surfaces.
+
+**Rationale:** User feedback — excessive explanatory text felt noisy and unnecessary on stream.
+
+---
+
 ---
 
 ## Summary Statistics
@@ -465,12 +483,12 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 |----------|-------|--------|
 | Architecture | 2 | Accepted / Implemented |
 | Overlay & Layout | 6 | Accepted / Implemented / Proposed / Completed |
-| Streamer Scenes | 5 | Approved / Completed / Rejected → Approved |
+| Streamer Scenes | 6 | Approved / Completed / Rejected → Approved |
 | Diablo 2 | 4 | Implemented / Approved |
 | Docker | 6 | Approved / Rejected |
 | Data & Schema | 3 | Implemented / Approved |
-| Directives | 2 | Active |
-| **Total** | **28** | Mostly Accepted/Implemented/Approved; 1 Rejection (Docker) |
+| Directives | 3 | Active |
+| **Total** | **30** | Mostly Accepted/Implemented/Approved; 1 Rejection (Docker) |
 
 ---
 

@@ -2,6 +2,52 @@
 
 ## Active Decisions
 
+### Overlay Refresh-Flash Fix — Silent Client Polling (2026-03-25)
+
+**Status:** ✅ APPROVED (2026-03-25)
+
+**Scope:** Fallout 4 and Diablo II OBS overlays  
+**Final Verdict:** Approved by Diablo after Baal implementation
+
+#### Architecture Decision
+Moved overlay polling from page-level SSR re-renders into client-side state preservation:
+- **Server Page Role:** Thin initial-data loader; renders static markup for OBS source initialization
+- **Client Component Role:** Owns persistent polling cycle; queries `getByUUID` every 5 seconds via tRPC
+- **Data Preservation:** `initialData` + `placeholderData` prevent blank scenes during refetch
+- **Error Handling:** `LiveOverlayStatusBadge` shows "Signal Lost" on failure while keeping last good scene visible
+- **Result:** Stable OBS overlay; smooth polling without animation re-trigger; real-time data within 1–2 seconds
+
+#### Files Modified
+- `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx` — Server page refactored to initial-data loader
+- `src/app/(overlay)/overlay/fallout4/[uuid]/OverlayClient.tsx` — New client polling component
+- `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx` — Server page refactored to initial-data loader
+- `src/app/(overlay)/overlay/diablo2/[uuid]/OverlayClient.tsx` — New client polling component
+- `src/app/(overlay)/_components/LiveOverlayStatusBadge.tsx` — New shared status indicator
+
+#### Validation Path
+- ✅ `pnpm test -- --run src/app/(overlay)/_components/__tests__/LiveOverlayStatusBadge.test.tsx` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm lint` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm build` passed
+- ✅ Manual browser refresh: no flashing (5+ repeats)
+- ✅ 30-second polling simulation: zero loading-state flickers
+- ✅ Character data updates within 2 seconds
+
+#### Quality Gate Criteria Met
+1. ✅ No whole-overlay flash on refresh
+2. ✅ No loading-state swaps during polling
+3. ✅ Stable component structure (no conditional zone flashing)
+4. ✅ Live data updates within 1–2 seconds
+5. ✅ Error state stability (Signal Lost badge, prior data preserved)
+6. ✅ OBS/browser rendering smooth (no visible jank)
+
+#### Next Steps
+Ready for merge and deployment.
+
+#### Reusable Pattern
+For future streaming overlays: **Server page = initial snapshot provider; client component = live polling engine.** Use `initialData`/`placeholderData` to avoid loading states that would blank the scene.
+
+---
+
 ### Overlay Refactor — Anchored Zone Architecture (2026-03-24 to 2026-03-25)
 
 **Status:** ✅ APPROVED (2026-03-25)

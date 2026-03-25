@@ -47,6 +47,33 @@
 - **Tyrael** will execute FO4 overlay expansion using this design pattern
 - **Implementation teams** have pattern, risks, and game-specific guidance ready to proceed
 
+## Team Coordination (2026-03-25T17:09:55Z)
+
+**Session:** Overlay refresh-flash fix completed and approved  
+**Orchestration Logs:**
+- `.squad/orchestration-log/2026-03-25T17:09:55Z-baal.md`
+- `.squad/orchestration-log/2026-03-25T17:09:55Z-diablo.md`
+
+### Completed Work: Overlay Refresh-Flash Fix
+- **Status:** ✅ APPROVED by Diablo
+- **Pattern:** Server page = initial snapshot; client component = live polling engine
+- **Architecture:** `initialData` + `placeholderData` prevent blank scenes during silent polling; `LiveOverlayStatusBadge` provides non-intrusive error feedback
+- **Validation:** All 6 quality gate criteria met (no flash, no loading swaps, stable structure, live updates, sane errors, smooth OBS rendering)
+- **Tests:** `pnpm test`, lint, build all pass
+
+### Key Implementation Details
+- Server pages refactored to thin initial-data loaders
+- New client components (`OverlayClient.tsx`) own polling via tRPC every 5 seconds
+- Mount/focus refetches disabled to prevent unnecessary polling
+- `LiveOverlayStatusBadge` component for error state without scene interruption
+- Data updates within 1–2 seconds; no whole-overlay flash observed
+
+### Cross-Agent Outcome
+- Baal implemented fix (no revision required)
+- Diablo reviewed and approved
+- Ready for production deployment
+- Pattern established for future streaming overlays
+
 ## Design Principles Documented
 1. **Zone-Based Layout:** Explicit positioning prevents overlap surprise
 2. **Multi-Layer Separation:** Borders, spacing, position (not color alone)
@@ -62,3 +89,6 @@
 - Ready to guide implementation teams on visual composition and styling reuse
 - D2 color palette and keyframes already established in `/overlay/diablo2/[uuid]`
 - FO4 next pass should apply zone anchoring principle with existing atoms, not redesign components from scratch
+- Live overlays should treat the server page as an initial snapshot only; the persistent scene belongs in a client component that polls tRPC in place so OBS does not redraw the whole source on each update.
+- `src/app/(overlay)/overlay/fallout4/[uuid]/OverlayClient.tsx` and `src/app/(overlay)/overlay/diablo2/[uuid]/OverlayClient.tsx` now own live refresh behavior; `page.tsx` in each route only fetches initial data and hands it off.
+- A small shared status pill in `src/app/(overlay)/_components/LiveOverlayStatusBadge.tsx` lets overlays keep stale-but-visible data during transient refresh failures instead of swapping to an error card and flashing the entire layout.

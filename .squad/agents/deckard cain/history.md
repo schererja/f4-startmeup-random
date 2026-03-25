@@ -17,6 +17,7 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- 2026-03-25: `src/app/(overlay)/coding/page.tsx` reads cleanest when the scene body uses one absolute wrapper with a reserved footer lane plus a two-column grid (`main workspace` + `right rail`) instead of individually positioned panels; nested rows keep the editor, terminal, narration rail, and webcam reserve from colliding.
 - Docker compose builds here depend on Docker Desktop's `docker-credential-desktop` helper being reachable on PATH; the binary already exists at `/Applications/Docker.app/Contents/Resources/bin/docker-credential-desktop` and a user-level symlink in `~/.local/bin/` restores public image pulls.
 - The project Dockerfile only uses standard syntax, so dropping the `# syntax=docker/dockerfile:1` directive avoids an extra frontend image lookup during builds.
 - Key Docker paths for local setup are `Dockerfile`, `docker-compose.yml`, and `.env.docker.example`; compose verification succeeded with `docker compose up --build --no-start app db`.
@@ -97,3 +98,27 @@ See `.squad/log/2026-03-25T02:43:59Z-overlay-approval.md` for full session summa
 
 ### Session Log
 See `.squad/log/2026-03-25T18:24:49Z-streamer-scenes-approval.md` for full session summary
+
+## Team Coordination (2026-03-25T19:59:33Z)
+
+**Session:** Scene fixes — coding layout grid shell, streamer scene no-flash defaults, scene param documentation
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T19:59:33Z-deckard-cain.md`
+
+### Completed Work: Coding Scene Grid Shell
+- **Status:** ✅ DELIVERED & APPROVED
+- **Scope:** `src/app/(overlay)/coding/page.tsx`
+- **Results:**
+  - Refactored from overlapping absolute zones to reserved two-column grid shell
+  - Left column: intro, editor, terminal (stacked rows)
+  - Right column: narration, webcam reserve (stacked rows)
+  - Footer reserved at shell level; interior padding eliminates chrome collisions
+  - Layout collision regression test added
+- **Validation:** ✅ Test, lint, build, manual browser verification at OBS source sizes all pass
+
+### Cross-Team Coordination
+- **Baal** completed stream scene no-flash defaults (opt-in animations across all scenes)
+- **Mephisto** completed scene data-flow pass (param docs, hydration flash fixed)
+- **Scribe** consolidated team decisions into decisions.md
+
+### Grid Shell Pattern for Future Scenes
+Two-column grid with reserved footer stabilizes layout at common OBS/browser sizes. All team members validated against same baseline: `SKIP_ENV_VALIDATION=1 pnpm test && pnpm lint && pnpm build`.

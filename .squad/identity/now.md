@@ -1,9 +1,9 @@
 ---
-updated_at: 2026-03-23T21:54:04.226Z
-focus_area: Initial setup
+updated_at: 2026-03-25T19:02:11Z
+focus_area: Streamer tools
 active_issues: []
 ---
 
 # What We're Focused On
 
-Getting started. Updated by coordinator at session start.
+Expanding the app into a broader streamer-tools set: overlays plus reusable stream scene pages and related UX improvements.

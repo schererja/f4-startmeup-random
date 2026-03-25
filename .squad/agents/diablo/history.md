@@ -287,3 +287,20 @@
 
 ### Session Log
 See `.squad/log/2026-03-25T18:24:49Z-streamer-scenes-approval.md` for full session summary
+
+## Team Coordination (2026-03-25T19:59:33Z)
+
+**Session:** Scene fixes — final validation and approval sweep
+**Session Log:** `.squad/log/2026-03-25T19:59:33Z-scene-fixes.md`
+
+### Cross-Team Coordination & Review
+- **Baal:** Completed stream scene no-flash defaults — validation passed
+- **Deckard Cain:** Completed coding scene grid shell — layout test added
+- **Mephisto:** Completed scene data-flow clarity pass — param docs + hydration flash fix
+- **Scribe:** Consolidated all team decisions into decisions.md; orchestration logs written; inbox merged
+
+### Session Deliverables
+1. Three-agent concurrent work: no-flash streamer scenes, coding layout stabilization, scene param documentation
+2. All validation gates passed: lint, build, test, manual OBS/browser verification
+3. Ready for merge and deployment
+4. Team decisions documented and archived in decisions.md

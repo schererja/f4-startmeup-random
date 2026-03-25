@@ -2,6 +2,131 @@
 
 ## Active Decisions
 
+### Stream Scene No-Flash Defaults (2026-03-25)
+
+**Status:** ✅ IMPLEMENTED (2026-03-25)
+
+**Scope:** Streamer scene shell component (`stream-scenes.tsx`), overlay card entrance animations  
+**Final Verdict:** Approved by Baal; no-flash rendering is now team standard for OBS sources
+
+#### Decision
+
+Streamer scenes must default to stable, flash-free rendering:
+- Scene shell sets `withFlicker={false}` by default (no whole-scene reload flash)
+- Entrance animations are now opt-in via `animateIn` prop (no mount-time panel fade)
+- Shared panels no longer trigger entrance fades on BRB or starting-soon scenes
+- URL query params continue to drive current values (countdown, reason, next segment)
+
+#### Rationale
+
+OBS/browser sources treat reload flashes and entrance animations like broadcast glitches. Static scenes (BRB, starting-soon) are most vulnerable. Opt-in animation preserves visual polish for active gameplay scenes while keeping passive scenes stable.
+
+#### Files Modified
+- `src/app/(overlay)/_components/stream-scenes.tsx` — `withFlicker={false}` default, `animateIn` prop gating
+- `src/app/(overlay)/_components/OverlayCard.tsx` — conditional entrance animation
+- `src/app/(overlay)/__tests__/stream-scenes.test.tsx` — regression test
+
+#### Validation Path
+- ✅ `pnpm test -- --run src/app/(overlay)/__tests__/stream-scenes.test.tsx` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm lint` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm build` passed
+- ✅ Manual OBS verification: 5+ browser source refreshes, no flicker observed
+- ✅ BRB and starting-soon scenes remain stable
+
+#### Next Steps
+
+Ready for merge. All future streamer scenes should follow no-flash defaults.
+
+---
+
+### Coding Scene Grid Shell (2026-03-25)
+
+**Status:** ✅ IMPLEMENTED (2026-03-25)
+
+**Scope:** Coding scene layout (`src/app/(overlay)/coding/page.tsx`)  
+**Final Verdict:** Approved by Deckard Cain; grid shell eliminates all layout collisions
+
+#### Decision
+
+The coding scene now reserves layout areas once at the shell level using a two-column grid:
+- **Left column:** Intro card, editor frame, terminal strip (stacked rows)
+- **Right column:** Narration rail, webcam reserve (stacked rows)
+- **Footer:** Reserved at shell level, not interior competing zones
+- **Padding:** Interior content padded below frame labels (no chrome collisions)
+
+#### Rationale
+
+Prior layout let intro, narration, editor, terminal, and webcam compete for the same canvas. Grid-based reservation keeps surfaces stable at common OBS/browser-source sizes while preserving existing scene concepts. Gameplay center remains fully readable.
+
+#### Files Modified
+- `src/app/(overlay)/coding/page.tsx` — grid shell + nested row/column layout
+- `src/app/(overlay)/__tests__/coding-scene-layout.test.tsx` — layout collision regression test
+
+#### Validation Path
+- ✅ `pnpm test -- --run src/app/(overlay)/__tests__/coding-scene-layout.test.tsx` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm lint` passed
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm build` passed
+- ✅ Manual browser verification: localhost:3000/coding at OBS source size, no collisions
+
+#### Next Steps
+
+Ready for merge. Grid shell pattern is reusable for future scene layouts.
+
+---
+
+### Scene Parameter Documentation (2026-03-25)
+
+**Status:** ✅ IMPLEMENTED (2026-03-25)
+
+**Scope:** Scene URL parameter discovery, countdown hydration clarity  
+**Final Verdict:** Approved by Mephisto; parameter contracts now discoverable without external docs
+
+#### Decision
+
+Added `SceneParamDocs` component that renders a discoverable parameter list for each scene:
+- Small styled panel in bottom-right corner of each scene
+- Lists all available URL parameters with descriptions and examples
+- Uses same aesthetic as overlay system
+- Easily accessible during scene setup in OBS without interfering with stream view
+- Countdown hydration flash eliminated via pre-render value stabilization
+
+#### Parameter Format & Examples
+- **BRB:** `?minutes=5`, `?reason=Stretch`, `?next=Build+Pull`
+- **Starting Soon:** `?minutes=10`, `?focus=Fallout4+Diablo2`
+- **Transition:** `?from=StartingSoon`, `?to=Gameplay`
+- **Coding:** `?project=my-app`, `?stack=React+Node`
+
+Note: URL-encoded; use `+` for spaces.
+
+#### Rationale
+
+Makes the data flow contract transparent without requiring external documentation. Streamers can adjust scenes in OBS by copying and modifying URLs. Reduces friction for new users discovering scene customization.
+
+#### Files Modified
+- `src/app/(overlay)/_components/stream-scenes.tsx` — `SceneParam` type + `SceneParamDocs` component
+- Scene pages (BRB, Starting Soon, Transition, Coding) — parameter definitions + exports
+- Scene hydration logic — countdown flash fix
+
+#### Validation Path
+- ✅ Tests passed
+- ✅ Each scene page: bottom-right docs panel visible with correct parameters
+- ✅ Parameter usage verified: `?minutes=5&reason=Stretch` (BRB), `?focus=Fallout4+Diablo2` (Starting Soon)
+
+#### Next Steps
+
+Component is part of `stream-scenes.tsx` shared exports. Reuse for any new scenes.
+
+---
+
+### User Directive — Streamer Tools (2026-03-25)
+
+**By:** Jason Scherer  
+**Status:** ⚡ ACTIVE DIRECTION
+
+Product direction is streamer tools. Continue building in that direction.
+
+---
+
 ### Overlay Refresh-Flash Fix — Silent Client Polling (2026-03-25)
 
 **Status:** ✅ APPROVED (2026-03-25)

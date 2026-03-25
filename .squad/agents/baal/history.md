@@ -9,6 +9,9 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- Streamer scene chrome should be broadcast-stable by default: `src/app/(overlay)/_components/stream-scenes.tsx` now leaves `obs-flicker` off unless a page explicitly opts in, so BRB/starting-soon/full-cam/coding/transition do not pulse the whole browser source.
+- `src/app/(overlay)/_components/OverlayCard.tsx` should not auto-run `obs-fadein`; mount-time panel fades read as flash in OBS, so entrance animation is now opt-in via `animateIn`.
+- Scene data points are currently operator-driven through route search params rather than live app state: e.g. `/brb?minutes=10&reason=Hydrate&next=Boss+prep` and `/starting-soon?minutes=15&focus=FO4`.
 - The `layout-fallout` reference works because it treats the overlay as full-scene composition, not a single floating card: anchored top-left identity, bottom-center SPECIAL strip, a persistent bottom status bar, and a reserved webcam frame all read cleanly in OBS at a glance.
 - The current Fallout 4 overlay already has the right visual language (`OverlayCard`, `StatBox`, `OverlayBadge`, scanlines, CRT glow), but it compresses everything into one card. The next richer pass should spread those same atoms into screen anchors so gameplay stays visible while key info remains legible.
 - The `layout-diablo` reference is worth borrowing more selectively: strong corner anchoring, separated status surfaces, and a bottom strip fit the stream use case, while diegetic HUD pieces like health/mana orbs only make sense if real game-state data exists.
@@ -96,3 +99,26 @@
 - Shared streamer scene chrome now lives in `src/app/(overlay)/_components/stream-scenes.tsx`; it provides the full-viewport canvas, anchored support panels, safe frames, and footer strip while reusing `OverlayCard` and `OverlayBadge`.
 - `src/app/(overlay)/_components/scene-clocks.tsx` is the right place for client-only timers in static scenes; `/brb` and `/starting-soon` use it for live countdowns without pulling in app data.
 - The new streamer routes are `/brb`, `/starting-soon`, `/full-cam`, `/transition`, and `/coding`; transition motion is driven by the `stream-transition-sweep` classes in `src/app/(overlay)/_components/overlay-animations.css`.
+
+## Team Coordination (2026-03-25T19:59:33Z)
+
+**Session:** Scene fixes — streamer scene no-flash defaults, coding layout grid shell, scene param documentation
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T19:59:33Z-baal.md`
+
+### Completed Work: Stream Scene No-Flash Defaults
+- **Status:** ✅ DELIVERED & APPROVED
+- **Scope:** `stream-scenes.tsx`, `OverlayCard.tsx` entrance animation gating
+- **Results:**
+  - Scene shell defaults `withFlicker={false}` (stable OBS rendering, no reload flash)
+  - Entrance animations now opt-in via `animateIn` prop (no mount-time panel fade)
+  - Shared panels preserve static appearance on BRB/starting-soon scenes
+  - Regression test added to validation suite
+- **Validation:** ✅ Test, lint, build, manual OBS browser verification all pass
+
+### Cross-Team Coordination
+- **Deckard Cain** completed coding scene grid shell (two-column layout eliminates collisions)
+- **Mephisto** completed scene data-flow pass (countdown hydration fixed, param docs added)
+- **Scribe** consolidated team decisions into decisions.md
+
+### Key Pattern for Future Work
+Streamer scenes default to no-flash, opt-in animation. All three team members validated against the same baseline: `SKIP_ENV_VALIDATION=1 pnpm test && pnpm lint && pnpm build`.

@@ -12,6 +12,7 @@ Use this when building OBS/browser-source overlays that must preserve gameplay v
 ## Patterns
 - Anchor panels to explicit zones (top-left identity, top-right status, bottom edge details) with absolute positioning inside a full-viewport container.
 - Reserve webcam areas with labeled frames and explicit dimensions so OBS crops remain stable.
+- When a browser source is meant to sit above real captures (camera, editor, gameplay), keep the canvas transparent and make frame labels explicit (`... below`) so the source reads as chrome, not fake embedded content.
 - Map layout modes to zone visibility (`minimal` = identity only, `stats` = identity + key stats, `full` = all zones + footer).
 - Only surface real data from APIs; avoid decorative HUD elements without live values.
 - Structural parity with a reference layout should preserve zone intent and crop behavior, not force fake HUD metaphors when the app lacks live telemetry for them.

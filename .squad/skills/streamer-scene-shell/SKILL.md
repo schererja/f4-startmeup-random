@@ -16,6 +16,9 @@ Use this when adding non-game-specific streamer scenes such as BRB, starting soo
 - Push broadcast-safe typography into shared tokens (for example `stream-scene-tokens.ts`) so eyebrow labels, footer notes, badges, and timer labels cannot drift below the 13px floor.
 - Keep major content in anchored support zones and reserve the primary viewing area with explicit framed boxes for webcam, editor, terminal, or chat sources.
 - For dense mixed-use scenes like `/coding`, reserve the footer once at the outer shell and use a nested grid (`workspace column` + `support column`) instead of individually absolutely positioning each panel. Let the left column own intro → editor → terminal while the right column owns narration → webcam.
+- When the scene frames external OBS sources, write the framing copy like a source map, not a mockup: say exactly which real source goes in the frame and list the OBS stack order inside the page.
+- If fixed setup docs would land on top of a reserved capture area, move them into a static support-rail panel instead of leaving them in the bottom-right corner.
+- For `/full-cam`, keep the center as clear as possible and use edge chrome plus framing guides; the browser source is the overlay layer, not the actual video feed.
 - Use client-only timer helpers (`scene-clocks.tsx`) for countdowns or clocks in otherwise static scenes, but keep decorative clocks visually hidden until client formatting is ready so OBS never shows a `00:00` hydration placeholder.
 - For transition scenes, drive motion with lightweight CSS sweeps so OBS can hard-cut the underlying sources while the browser source carries the visual wipe.
 - Model transition scenes with explicit `from` and `to` params. A transition page should describe the handoff, not just say "switching scenes."

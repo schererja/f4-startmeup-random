@@ -2,6 +2,68 @@
 
 ## Active Decisions
 
+### Browser Source Framing — Transparent Shells (2026-03-25)
+
+**Status:** ✅ APPROVED (2026-03-25)
+
+**Scope:** Full-cam, coding, Fallout 4, Diablo II overlays  
+**Final Verdict:** Approved by Baal; transparent framing now team standard
+
+#### Decision
+
+Streamer setup routes should render as transparent framing chrome, not fake embedded content:
+- Use transparent canvases with explicit labels: "Editor capture below" or "Camera source below"
+- Direct OBS layer-order cues instead of opaque backdrops
+- Capture reserves remain in layout but are visually transparent
+- Reduces setup confusion about real feed placement in OBS
+
+#### Rationale
+
+Opaque backdrops and placeholder visuals make operators think the browser source contains the real feed. Transparent shells with explicit frame labels match actual OBS composition and eliminate guesswork during scene setup.
+
+#### Affected Paths
+- `src/app/(overlay)/full-cam/page.tsx`
+- `src/app/(overlay)/coding/page.tsx`
+- `src/app/(overlay)/overlay/fallout4/[uuid]/OverlayClient.tsx`
+- `src/app/(overlay)/overlay/diablo2/[uuid]/OverlayClient.tsx`
+- `src/app/(overlay)/_components/stream-scenes.tsx`
+
+#### Next Steps
+
+All future scenes should adopt transparent frame architecture with explicit source labels.
+
+---
+
+### OBS Source-Map Scenes (2026-03-25)
+
+**Status:** ✅ APPROVED (2026-03-25)
+
+**Scope:** `/coding` and `/full-cam` scene layout  
+**Final Verdict:** Approved by Deckard Cain; scenes now read as OBS setup guides
+
+#### Decision
+
+Browser sources should explain real OBS composition instead of pretending to be captures:
+- `/coding` labels editor and webcam boxes as explicit OBS targets with source stack order
+- `/full-cam` treats browser source as chrome over fullscreen camera/media source; center kept clear
+- Scene parameter docs render inline in support rail (not bottom-right panels covering reserved targets)
+
+#### Rationale
+
+Prior layouts looked decorative and left unclear where real editor captures or webcam sources belonged. These changes turn pages into immediate setup guides without guessing source order or placement.
+
+#### Validation Path
+- ✅ Explicit real-source target labels
+- ✅ Clearer OBS layer ordering
+- ✅ Center kept clear in full-cam
+- ✅ Param docs moved out of reserved capture zones
+
+#### Next Steps
+
+Grid shell and transparent frame pattern reusable for future scene layouts.
+
+---
+
 ### Stream Scene No-Flash Defaults (2026-03-25)
 
 **Status:** ✅ IMPLEMENTED (2026-03-25)

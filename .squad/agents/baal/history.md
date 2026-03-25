@@ -9,6 +9,10 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- `src/app/(overlay)/full-cam/page.tsx` and `src/app/(overlay)/coding/page.tsx` must stay transparent-frame browser sources: they should provide chrome, guide rails, and lower-thirds only while the real camera/editor captures sit underneath in OBS.
+- Placeholder editor/terminal content is a trap for OBS scenes; coding/full-cam guidance now uses framing copy (`Editor capture below`, `Camera source below`) instead of fake embedded content so operators understand layer order immediately.
+- Live overlay reserve zones in `src/app/(overlay)/overlay/fallout4/[uuid]/OverlayClient.tsx` and `src/app/(overlay)/overlay/diablo2/[uuid]/OverlayClient.tsx` should label the marked camera window as an OBS layering target, not as content the browser source renders itself.
+
 - Streamer scene chrome should be broadcast-stable by default: `src/app/(overlay)/_components/stream-scenes.tsx` now leaves `obs-flicker` off unless a page explicitly opts in, so BRB/starting-soon/full-cam/coding/transition do not pulse the whole browser source.
 - `src/app/(overlay)/_components/OverlayCard.tsx` should not auto-run `obs-fadein`; mount-time panel fades read as flash in OBS, so entrance animation is now opt-in via `animateIn`.
 - Scene data points are currently operator-driven through route search params rather than live app state: e.g. `/brb?minutes=10&reason=Hydrate&next=Boss+prep` and `/starting-soon?minutes=15&focus=FO4`.
@@ -122,3 +126,39 @@
 
 ### Key Pattern for Future Work
 Streamer scenes default to no-flash, opt-in animation. All three team members validated against the same baseline: `SKIP_ENV_VALIDATION=1 pnpm test && pnpm lint && pnpm build`.
+
+## Team Coordination (2026-03-25T20:18:27Z)
+
+**Session:** Team coordination — framing fixes orchestration
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T20:18:27Z-baal.md`
+**Session Log:** `.squad/log/2026-03-25T20:18:27Z-framing-fixes.md`
+
+### Team Alignment: Browser Source Framing
+- **Session Focus:** Align Deckard Cain & Baal on shared framing architecture
+- **Deckard Cain Work:** Reworked `/coding` and `/full-cam` scenes as OBS setup guides
+  - Explicit real-source target labels
+  - Clear OBS layer ordering
+  - Center kept clear in full-cam
+  - Scene param docs moved out of reserved capture zones
+- **Baal Work:** Browser-source transparency across full-cam, coding, FO4, D2 overlays
+  - Transparent framing chrome, not fake embedded feeds
+  - Explicit source-below cues with OBS target language
+  - Consistent layering approach across all scenes
+- **Decision:** Both decisions merged to `decisions.md` (IDs: `baal-browser-source-framing`, `deckard cain-obs-source-map-scenes`)
+- **Validation:** ✅ All team work aligned; patterns documented; ready for integration
+
+### Decisions Merged
+1. **Browser Source Framing:** Transparent shells with explicit source labels team standard
+2. **OBS Source-Map Scenes:** `/coding` and `/full-cam` now read as real OBS composition guides
+
+### Pattern Established
+Explicit source-target architecture eliminates setup confusion. All future streamer scenes should adopt:
+- Transparent framing chrome (not opaque backdrops)
+- Direct OBS layer-order cues (not placeholder content)
+- Capture reserves remain in layout but visually transparent
+- Labels guide operator placement in OBS (source order, layer stacking)
+
+### Next Steps
+- Transparent frame and explicit-source patterns ready for team reuse
+- Grid shell + transparent frame combination validates across both agents
+- Scene composition principle now documented for scaling

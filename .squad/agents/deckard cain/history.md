@@ -17,6 +17,8 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- 2026-03-25: For OBS-friendly browser scenes that frame external captures, replace decorative mock content with explicit source-target copy like “Real editor source goes here” or “Real camera source goes here,” and spell out the OBS layer order directly in the scene (`src/app/(overlay)/coding/page.tsx`, `src/app/(overlay)/full-cam/page.tsx`).
+- 2026-03-25: `SceneParamDocs` in `src/app/(overlay)/_components/stream-scenes.tsx` now supports `layout="static"` so setup docs can live inside a support rail instead of covering webcam/editor targets on dense scenes.
 - 2026-03-25: `src/app/(overlay)/coding/page.tsx` reads cleanest when the scene body uses one absolute wrapper with a reserved footer lane plus a two-column grid (`main workspace` + `right rail`) instead of individually positioned panels; nested rows keep the editor, terminal, narration rail, and webcam reserve from colliding.
 - Docker compose builds here depend on Docker Desktop's `docker-credential-desktop` helper being reachable on PATH; the binary already exists at `/Applications/Docker.app/Contents/Resources/bin/docker-credential-desktop` and a user-level symlink in `~/.local/bin/` restores public image pulls.
 - The project Dockerfile only uses standard syntax, so dropping the `# syntax=docker/dockerfile:1` directive avoids an extra frontend image lookup during builds.
@@ -122,3 +124,32 @@ See `.squad/log/2026-03-25T18:24:49Z-streamer-scenes-approval.md` for full sessi
 
 ### Grid Shell Pattern for Future Scenes
 Two-column grid with reserved footer stabilizes layout at common OBS/browser sizes. All team members validated against same baseline: `SKIP_ENV_VALIDATION=1 pnpm test && pnpm lint && pnpm build`.
+
+## Team Coordination (2026-03-25T20:18:27Z)
+
+**Session:** Team coordination — framing fixes orchestration
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T20:18:27Z-deckard-cain.md`
+**Session Log:** `.squad/log/2026-03-25T20:18:27Z-framing-fixes.md`
+
+### Team Alignment: OBS Source-Map Scenes
+- **Session Focus:** Align Deckard Cain & Baal on shared framing architecture
+- **Deckard Cain Work:** Reworked `/coding` and `/full-cam` scenes as OBS setup guides
+  - Explicit real-source target labels
+  - Clear OBS layer ordering
+  - Center kept clear in full-cam
+  - Scene param docs moved out of reserved capture zones
+- **Baal Work:** Browser-source transparency across full-cam, coding, FO4, D2 overlays
+  - Transparent framing chrome, not fake embedded feeds
+  - Explicit source-below cues with OBS target language
+  - Consistent layering approach across all scenes
+- **Decision:** Both decisions merged to `decisions.md` (IDs: `deckard cain-obs-source-map-scenes`, `baal-browser-source-framing`)
+- **Validation:** ✅ All team work aligned; patterns documented; ready for integration
+
+### Decisions Merged
+1. **OBS Source-Map Scenes:** `/coding` and `/full-cam` now read as real OBS composition guides
+2. **Browser Source Framing:** Transparent shells with explicit source labels team standard
+
+### Next Steps
+- Grid shell and transparent frame patterns ready for team reuse
+- Future scenes should adopt explicit source-target architecture
+- Scene composition principle now documented for scaling

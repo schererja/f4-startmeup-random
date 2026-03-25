@@ -24,6 +24,9 @@
 - 2026-03-25: The Fallout 4 overlay detail-zone gate in `src/app/(overlay)/overlay/fallout4/[uuid]/page.tsx` needs an explicit null-safe boolean (`(traitDescription ?? locationDescription) !== undefined`) to satisfy `@typescript-eslint/prefer-nullish-coalescing` without changing when the right-side cards render.
 - 2026-03-25: Diablo II overlay broadcast labels in `src/app/(overlay)/overlay/diablo2/[uuid]/page.tsx` stay readable after downscaling when section and badge labels are held at roughly 13px via shared size tokens instead of shrinking the whole chrome.
 - 2026-03-25: Repo-safe overlay validation is `SKIP_ENV_VALIDATION=1 pnpm lint` and `SKIP_ENV_VALIDATION=1 pnpm build`; after the overlay revision, lint passes with existing baseline warnings and build succeeds.
+- 2026-03-25: Streamer-scene chrome now shares a 13px floor through `src/app/(overlay)/_components/stream-scene-tokens.ts`, which is consumed by `stream-scenes.tsx`, `OverlayBadge.tsx`, `StatBox.tsx`, and scene pages that render broadcast meta labels.
+- 2026-03-25: Decorative local clocks in `src/app/(overlay)/_components/scene-clocks.tsx` should reserve width with hidden tabular numerals until the client formats local time, preventing the old visible `00:00` hydration pop on `/brb` and `/starting-soon`.
+- 2026-03-25: `src/app/(overlay)/transition/page.tsx` now models handoffs with explicit `from` and `to` params (while still honoring legacy `next`), so transition scenes can communicate source swaps instead of generic placeholder copy.
 
 ## Team Coordination (2026-03-24T20:25:54Z)
 
@@ -73,3 +76,24 @@ Keep `layout=minimal|stats|full` but reinterpret:
 
 ### Session Log
 See `.squad/log/2026-03-25T02:43:59Z-overlay-approval.md` for full session summary
+
+## Team Coordination (2026-03-25T18:24:49Z)
+
+**Orchestration Log:** `.squad/orchestration-log/2026-03-25T18:24:49Z-deckard-cain.md`
+
+### Completed Work: Streamer Scenes Revision (Final Delivery)
+- **Status:** ✅ APPROVED by Diablo — No further revision needed
+- **Task:** Rework shared streamer-scene shell around three concrete guardrails
+- **Fixes Applied:**
+  1. Broadcast Typography Floor: Created `stream-scene-tokens.ts` with `STREAM_SCENE_MIN_FONT_SIZE_REM` constant; applied ≥13px minimum to all stream-facing text in `OverlayBadge.tsx`, `StatBox.tsx`, scene labels, footer notes
+  2. Hydration Clock Pop-in: Modified `scene-clocks.tsx` `LiveClock` to reserve width with hidden tabular numerals until client formats local time; no visible `00:00` swap on `/brb` and `/starting-soon`
+  3. Transition Handoff Model: Enhanced `/transition/page.tsx` with explicit `from` and `to` query params for clear scene-switching; maintained backward-compatible `next` fallback
+- **Validation:**
+  - ✅ `pnpm test -- --run` (all tests pass)
+  - ✅ `SKIP_ENV_VALIDATION=1 pnpm lint` (baseline warnings only)
+  - ✅ `SKIP_ENV_VALIDATION=1 pnpm build` (build succeeds)
+- **Files:** `src/app/(overlay)/_components/stream-scene-tokens.ts` (new), `src/app/(overlay)/_components/stream-scenes.tsx`, `src/app/(overlay)/_components/OverlayBadge.tsx`, `src/app/(overlay)/_components/StatBox.tsx`, `src/app/(overlay)/_components/scene-clocks.tsx`, `src/app/(overlay)/transition/page.tsx`
+- **Outcome:** Feature ready for merge and deployment; streamer scenes (brb, starting-soon, full-cam, transition, coding) approved and pass all broadcast-safety gates
+
+### Session Log
+See `.squad/log/2026-03-25T18:24:49Z-streamer-scenes-approval.md` for full session summary

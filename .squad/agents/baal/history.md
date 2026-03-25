@@ -92,3 +92,7 @@
 - Live overlays should treat the server page as an initial snapshot only; the persistent scene belongs in a client component that polls tRPC in place so OBS does not redraw the whole source on each update.
 - `src/app/(overlay)/overlay/fallout4/[uuid]/OverlayClient.tsx` and `src/app/(overlay)/overlay/diablo2/[uuid]/OverlayClient.tsx` now own live refresh behavior; `page.tsx` in each route only fetches initial data and hands it off.
 - A small shared status pill in `src/app/(overlay)/_components/LiveOverlayStatusBadge.tsx` lets overlays keep stale-but-visible data during transient refresh failures instead of swapping to an error card and flashing the entire layout.
+- Root-level streamer scene routes can live in `src/app/(overlay)/{scene}/page.tsx` so URLs like `/brb` stay browser-source friendly while still inheriting the transparent OBS layout.
+- Shared streamer scene chrome now lives in `src/app/(overlay)/_components/stream-scenes.tsx`; it provides the full-viewport canvas, anchored support panels, safe frames, and footer strip while reusing `OverlayCard` and `OverlayBadge`.
+- `src/app/(overlay)/_components/scene-clocks.tsx` is the right place for client-only timers in static scenes; `/brb` and `/starting-soon` use it for live countdowns without pulling in app data.
+- The new streamer routes are `/brb`, `/starting-soon`, `/full-cam`, `/transition`, and `/coding`; transition motion is driven by the `stream-transition-sweep` classes in `src/app/(overlay)/_components/overlay-animations.css`.

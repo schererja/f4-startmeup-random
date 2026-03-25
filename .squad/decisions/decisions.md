@@ -1,17 +1,18 @@
 # Squad Decisions Archive
 
-**Last Updated:** 2026-03-24T20:25:54Z  
-**Total Decisions:** 23
+**Last Updated:** 2026-03-25T18:24:49Z  
+**Total Decisions:** 28
 
 ---
 
 ## Table of Contents
 1. [Architecture & Multi-Game](#architecture--multi-game)
 2. [Overlay & Layout](#overlay--layout)
-3. [Diablo 2 Implementation](#diablo-2-implementation)
-4. [Docker & Infrastructure](#docker--infrastructure)
-5. [Data & Schema](#data--schema)
-6. [Directives & Coordination](#directives--coordination)
+3. [Streamer Scenes](#streamer-scenes)
+4. [Diablo 2 Implementation](#diablo-2-implementation)
+5. [Docker & Infrastructure](#docker--infrastructure)
+6. [Data & Schema](#data--schema)
+7. [Directives & Coordination](#directives--coordination)
 
 ---
 
@@ -205,6 +206,99 @@ Comprehensive strengths/risks analysis of both reference layouts. Established zo
 
 ---
 
+## Streamer Scenes
+
+### Baal: Streamer Scenes Decision
+**Date:** 2026-03-25 | **Status:** Approved | **Scope:** Generic OBS/browser-source scene routes
+
+Place new generic streamer scenes directly under the `(overlay)` route group as `src/app/(overlay)/{scene}/page.tsx`, giving root URLs like `/brb` and `/coding` while keeping the transparent OBS-safe layout and no-app-chrome behavior.
+
+**Implementation Notes:**
+- Reuse existing FO4 overlay atoms (`OverlayCard`, `OverlayBadge`, `StatBox`) through shared scene shell in `src/app/(overlay)/_components/stream-scenes.tsx`
+- Treat these as practical scene frames, not fake video: use explicit safe-frame boxes for camera/editor/chat areas and keep center space clean where a real source will sit underneath
+- Use lightweight search params for copy and timer customization instead of multiplying route variants
+
+**Why:** Keeps streamer-tool routes coherent with approved overlay direction: anchored zones, reserved frames, and broadcast-safe typography. Avoids splitting generic scenes into a second layout system when the existing overlay group already solves transparency and browser-source concerns.
+
+---
+
+### Diablo: Streamer Scenes Review Gate
+**Date:** 2026-03-25 | **Status:** Completed | **Scope:** Pre-implementation acceptance criteria for new streamer scene pages
+
+Created comprehensive pre-implementation review gate for streamer scene pages (`/brb`, `/starting-soon`, `/full-cam`, `/transition`, `/coding`) with focus on stream usability, completeness, and OBS/browser-source friendliness.
+
+**Gate Structure:** 4 domains × 6+ criteria each, 4-phase testing methodology, acceptance criteria (must/should/nice-to-have)
+- **Domain 1:** Route & Architecture — public access, layout group inheritance, fallback behavior
+- **Domain 2:** Stream Safety — transparent background, broadcast-safe typography (≥13px, ≥4.5:1 contrast), smooth animations, no flashing
+- **Domain 3:** Webcam/Full-Cam Behavior — explicit frame dimensions, no UI clutter, graceful camera handling
+- **Domain 4:** Scene Layout Usefulness — transition and coding layouts actually useful on stream, query param customization
+
+**Key Insight:** Streamer scenes differ from game overlays—no character data binding required, but layout must be immediately useful (transition for talking points, coding for IDE layout, BRB for status). Query params enable streamer customization without code changes.
+
+---
+
+### Diablo: Streamer Scenes Review (Initial)
+**Date:** 2026-03-25 | **Status:** REJECTION → Revised | **Next Owner:** Deckard Cain
+
+**Why Rejected:**
+1. **Broadcast Readability Gate Broken:** Shared labels/meta text in `stream-scenes.tsx`, `OverlayBadge.tsx`, `StatBox.tsx` render at 0.6rem–0.68rem (below 13px minimum), affecting multiple scenes at once
+2. **Hydration Clock Pop-in:** `scene-clocks.tsx` `LiveClock` seeds `00:00`, swaps to real time after hydration (visible jank)
+3. **Transition Underpowered:** Only supports `label` and `next`; lacks direct `from` / `to` handoff model for actual scene switching
+
+**Revision Guidance:**
+- Raise every stream-facing label/body/footer to ≥13px including shared atoms
+- Remove `00:00` hydration swap from `LiveClock` or use stable server/client-safe rendering
+- Give `/transition` clearer handoff model (`from`, `to`, sensible defaults)
+
+**Reviewer Note:** Scene set close structurally; composition useful. Typography floor is hard gate; shared low-size labels block shipping.
+
+---
+
+### Deckard Cain: Streamer Scenes Revision
+**Date:** 2026-03-25 | **Status:** Completed | **Scope:** Rework shared streamer-scene shell per three concrete guardrails
+
+Rework streamer-scene shell around three guardrails:
+1. Enforce 13px broadcast-safe floor through shared scene typography tokens
+2. Treat decorative local clocks as hydration-sensitive UI; keep visually hidden until client time ready
+3. Model transition scenes as explicit `from` → `to` handoffs; retain `next` only as backward-compatible fallback for `to`
+
+**Why:**
+- One undersized shared atom (`OverlayBadge`, timer labels, eyebrow text, footer notes) can fail every scene at once in OBS
+- Decorative local clock not worth visible `00:00` → local-time pop during hydration
+- Stream transitions more useful when communicating outgoing/incoming scene directly vs. generic placeholder
+
+**Implementation:**
+- Created `src/app/(overlay)/_components/stream-scene-tokens.ts` with `STREAM_SCENE_MIN_FONT_SIZE_REM` constant
+- Applied ≥13px minimum to `OverlayBadge.tsx`, `StatBox.tsx`, scene labels, footer text
+- Modified `src/app/(overlay)/_components/scene-clocks.tsx` `LiveClock` to reserve space with hidden numerals until hydration
+- Enhanced `src/app/(overlay)/transition/page.tsx` with explicit `from` / `to` params, backward-compatible `next` fallback
+
+**Validation:**
+- ✅ `pnpm test -- --run`
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm lint`
+- ✅ `SKIP_ENV_VALIDATION=1 pnpm build`
+
+---
+
+### Diablo: Streamer Scenes Final Review (Approved)
+**Date:** 2026-03-25 | **Status:** APPROVED | **Scope:** Final QA of revised streamer-scene set
+
+**What Passed:**
+1. Broadcast Readability Gate: All stream-facing text now ≥13px via shared `STREAM_SCENE_MIN_FONT_SIZE_REM` token
+2. Hydration Stability: `LiveClock` no longer shows visible `00:00` → real-time pop-in on `/brb` and `/starting-soon`
+3. Transition Handoff Model: `/transition` supports explicit `from` / `to` params for clear scene-switching communication
+4. Route & Architecture: All five routes public, transparent background, no auth, inherit overlay layout
+5. Validation: All checks pass with no new warnings
+
+**Quality Notes:**
+- Live HTTP smoke checks skipped due to baseline Clerk/middleware auth noise (not scene-page-specific)
+- All gate criteria satisfied
+- Ready for merge and deployment
+
+**Recommendation:** Feature ready. Streamer scene set (brb, starting-soon, full-cam, transition, coding) approved and passes all broadcast-safety gates. No follow-up revision required.
+
+---
+
 ## Diablo 2 Implementation
 
 ### Mephisto: D2 Schema and API Implementation
@@ -371,11 +465,12 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 |----------|-------|--------|
 | Architecture | 2 | Accepted / Implemented |
 | Overlay & Layout | 6 | Accepted / Implemented / Proposed / Completed |
+| Streamer Scenes | 5 | Approved / Completed / Rejected → Approved |
 | Diablo 2 | 4 | Implemented / Approved |
 | Docker | 6 | Approved / Rejected |
 | Data & Schema | 3 | Implemented / Approved |
 | Directives | 2 | Active |
-| **Total** | **23** | Mostly Accepted/Implemented; 1 Rejection |
+| **Total** | **28** | Mostly Accepted/Implemented/Approved; 1 Rejection (Docker) |
 
 ---
 
@@ -384,8 +479,9 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 - **Accepted:** 8
 - **Implemented:** 7
 - **Proposed:** 1
-- **Approved:** 5
+- **Approved:** 10 (including Streamer Scenes cycle)
 - **Completed (Analysis):** 2
+- **Completed (Implementation):** 4
 - **Rejection:** 1 (Docker Postgres — critical library mismatch requiring specialist fix)
 - **Resolved:** Several ongoing items with followup work
 
@@ -399,6 +495,8 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 - **Mephisto** → Tyrael: D2 implementation enablement
 - **Diablo** → Tyrael: Build regression and Docker followup
 - **Deckard Cain** → Tyrael: D2 pages scaffolding
+- **Deckard Cain** → Diablo: Streamer scenes revision cycle (2026-03-25)
+- **Diablo** → Deckard Cain: Streamer scenes review gate and approval (2026-03-25)
 - **Coordinator** → All: Layout reference directive
 
 ---
@@ -412,3 +510,4 @@ Use `localhost:3000/layout-fallout` and `localhost:3000/layout-diablo` as positi
 5. **Implement D2 Routes** (Tyrael multi-game): Full `/diablo2/*` implementation
 6. **Update TopNav** (Tyrael multi-game): Reflect multi-game hub structure
 7. **Overlay Composition** (Baal): Apply layout reference to FO4 full scene
+8. **Merge Streamer Scenes Feature** (Scribe): Commit `.squad/` logs and merge feature branch (2026-03-25)

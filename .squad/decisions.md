@@ -2,6 +2,77 @@
 
 ## Active Decisions
 
+### Docker Compose Bootstrap Gating (2026-03-26)
+
+**Status:** ✅ IMPLEMENTED (2026-03-26)
+
+**Scope:** Docker Compose startup flow  
+**Final Verdict:** Implemented by Mephisto; fresh startup now includes schema + seed bootstrap
+
+#### Decision
+
+Docker Compose startup must gate app startup on successful schema and seed bootstrap:
+1. **Migrate service:** Runs `pnpm db:push && pnpm db:seed` as part of default compose (no profile opt-in)
+2. **App dependency:** App waits for migrate to complete successfully before starting
+3. **Database schema + seed:** Both required for usable stack
+
+#### Rationale
+
+- Fresh `docker compose up -d --build` was starting app against empty database (schema + no seed data)
+- Fallout 4 queries immediately fail on missing `f4sr_characters`, `f4sr_traits` relations
+- D2 tables exist after schema push but require seed data for reference rows
+- Explicit bootstrap gate ensures fresh volumes produce working stacks without operator manual steps
+
+#### Validation Path
+- ✅ Lint: `SKIP_ENV_VALIDATION=1 pnpm lint` passed
+- ✅ Build: `SKIP_ENV_VALIDATION=1 pnpm build` passed
+- ✅ Tests: `pnpm test` passed
+- ✅ Docker verification: Clean volume + `docker compose up` produces schema + seed data
+- ✅ App startup: Queries execute without missing relation errors
+
+#### Files Modified
+- `docker-compose.yml` — migrate service removed from profile, app depends_on migrate
+- `README.md` — Docker startup documentation updated
+
+#### Next Steps
+
+Ready for deployment. All fresh stacks will include required schema and seed data.
+
+---
+
+### Docker Compose Postgres Port Dynamic Assignment (2026-03-26)
+
+**Status:** ✅ IMPLEMENTED (2026-03-26)
+
+**Scope:** Docker Compose postgres service host port binding  
+**Final Verdict:** Implemented by Mephisto
+
+#### Decision
+
+Postgres container port 5432 publishes to `127.0.0.1` with `published: "${POSTGRES_PORT:-0}"`:
+- Default (unset `POSTGRES_PORT`): OS assigns dynamic port (`0` means automatic)
+- When needed: Set `POSTGRES_PORT` in environment or Compose `.env` for fixed binding
+- App internal connection: Unchanged (`db:5432`)
+
+#### Rationale
+
+- Prevents `docker compose up` from failing on machines with existing local Postgres on port 5432
+- Keeps common workflow unchanged (no environment variables required)
+- Allows operators to set fixed port when needed via `.env` or shell export
+
+#### Operator Notes
+
+Use `docker compose port db 5432` to discover the assigned host port. The container remains reachable via `db:5432` internally (app, migrator unchanged).
+
+#### Files Modified
+- `docker-compose.yml` — postgres port binding changed to dynamic assignment
+
+#### Next Steps
+
+Ready for deployment. Reduces Docker startup friction on shared machines.
+
+---
+
 ### Browser Source Framing — Transparent Shells (2026-03-25)
 
 **Status:** ✅ APPROVED (2026-03-25)

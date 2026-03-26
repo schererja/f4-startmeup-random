@@ -218,6 +218,13 @@
 - **No hydration jank** (from overlay refresh-flash fix) applies even to static scenes to prevent layout shift on JS load
 - **Graceful degradation** (from error handling patterns) required for invalid query params
 
+### Docker Bootstrap Regression Validation (2026-03-26)
+- **Broken path reproduced:** with the old compose wiring, a fresh `docker compose up -d --build` started `db` and `app` without running schema bootstrap because `migrate` lived behind an opt-in profile. The app reached `Ready` against an empty database, and `psql \dt` reported no relations, matching the missing `f4sr_characters` / `f4sr_traits` failure family.
+- **Validated fix shape:** Docker bootstrap is safe only when the one-shot `migrate` service runs on normal compose startup and `app` waits for `service_completed_successfully`. The current candidate wiring in `docker-compose.yml` plus the `migrator` target in `Dockerfile` satisfied that gate on a clean volume.
+- **Seed requirement:** schema push alone is not enough for a usable stack. Fallout 4 pages (`src/app/(app)/fallout4/characters/new/page.tsx`) immediately query traits/jobs/locations and do not self-seed, while Diablo II can lazily refill reference rows only after the D2 tables already exist.
+- **Validation results:** clean compose bootstrap created `f4sr_characters`, `f4sr_traits`, and `d2_classes`; migrate logs showed FO4 + D2 seed counts (18 traits, 38 jobs, 39 locations, 7 classes, 6 mercenaries, 25 skill focuses). Repo checks also passed via `SKIP_ENV_VALIDATION=1 pnpm lint`, `SKIP_ENV_VALIDATION=1 pnpm build`, and `pnpm test -- --run`.
+- **Key paths:** `docker-compose.yml`, `Dockerfile`, `README.md`, `src/server/db/seed.ts`, `src/server/db/seed-d2.ts`, `src/app/(app)/fallout4/characters/new/page.tsx`, `src/app/(app)/diablo2/characters/new/page.tsx`.
+
 ## Team Coordination (2026-03-25T17:09:55Z)
 
 **Session:** Overlay refresh-flash fix completed and approved  
@@ -304,3 +311,26 @@ See `.squad/log/2026-03-25T18:24:49Z-streamer-scenes-approval.md` for full sessi
 2. All validation gates passed: lint, build, test, manual OBS/browser verification
 3. Ready for merge and deployment
 4. Team decisions documented and archived in decisions.md
+
+## Team Coordination (2026-03-26T14:11:35Z)
+
+**Session:** db-bootstrap-fix — Docker Compose startup regression fix  
+**Session Log:** `.squad/log/2026-03-26T14:11:35Z-db-bootstrap-fix.md`
+
+### Cross-Team Coordination: Docker Bootstrap Gating
+- **Status:** ✅ COMPLETE & DEPLOYED
+- **Jason Scherer:** Reported regression — fresh Docker startup failed with missing relations (f4sr_characters, f4sr_traits)
+- **Diablo (this agent):** Reproduced and validated root cause — migrate service was opt-in (behind profile), allowing app startup against empty schema
+- **Mephisto:** Implemented bootstrap gate and verified
+- **Result:** Fresh `docker compose up` now includes schema + seed bootstrap; app waits for successful migrate before starting
+
+### Decision Archived
+- **Docker Compose Bootstrap Gating** (2026-03-26) — migrate service now part of default compose, app depends_on completion
+- **Docker Compose Postgres Port Dynamic Assignment** (2026-03-26) — postgres port defaults to OS assignment (no conflicts on shared machines)
+- See `.squad/decisions.md` for full decision entry
+
+### Validation Passed
+- ✅ Lint: `SKIP_ENV_VALIDATION=1 pnpm lint` passed
+- ✅ Build: `SKIP_ENV_VALIDATION=1 pnpm build` passed
+- ✅ Tests: `pnpm test` passed
+- ✅ Docker: Clean volume + `docker compose up` produces schema + seed data; app starts successfully

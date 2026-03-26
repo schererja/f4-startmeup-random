@@ -9,6 +9,9 @@
 ## Learnings
 
 <!-- Append learnings below -->
+- `docker-compose.yml` should publish the `db` service on `127.0.0.1` with `published: "${POSTGRES_PORT:-0}"` so Docker chooses a free host port by default while app and migrator still connect internally via `db:5432`.
+- For this repo's Docker flow, `docker compose port db 5432` is the right way to discover the host-side Postgres port after `docker compose up -d`.
+- The default Docker Compose path must include the one-shot `migrate` service, and `app` must depend on `migrate` with `service_completed_successfully`; DB health alone does not prevent missing-table crashes on fresh volumes.
 - The shared DB entrypoint is `src/server/db/index.ts`; it now uses `drizzle-orm/postgres-js` plus the `postgres` client so `POSTGRES_URL` can point at standard PostgreSQL hosts, including Docker service names.
 - `src/server/db/seed-d2.ts` should reuse the shared `~/server/db` client instead of creating its own driver-specific client, keeping seeding aligned with app runtime behavior.
 - Docker/local validation for this repo can use `docker compose up -d db`, `pnpm db:push`, and a small `db.execute(sql\`select 1\`)` smoke test against `postgresql://postgres:password@localhost:5432/f4-startmeup-random`.
@@ -70,3 +73,29 @@ Each scene now explicitly documents:
 
 ### Data Flow Contract Now Transparent
 URL parameter contracts are no longer hidden in source code. Streamers have immediate visibility into customization options during scene setup in OBS.
+
+## Team Coordination (2026-03-26T14:11:35Z)
+
+**Session:** db-bootstrap-fix — Docker Compose startup regression fix  
+**Session Log:** `.squad/log/2026-03-26T14:11:35Z-db-bootstrap-fix.md`
+
+### Cross-Team Coordination: Docker Bootstrap Gating & Port Dynamic Assignment
+- **Status:** ✅ COMPLETE & DEPLOYED
+- **Jason Scherer:** Reported regression — fresh Docker startup failed with missing DB relations
+- **Diablo:** Reproduced, validated root cause, and defined fix requirements
+- **Mephisto (this agent):** Implemented bootstrap gate and port dynamic assignment
+- **Result:** Fresh Docker Compose startup now includes required schema + seed bootstrap
+
+### Work Completed
+1. **Docker Bootstrap Gating:** Moved migrate service from optional profile to default compose path; added app dependency on successful migrate completion
+2. **Postgres Port Dynamic Assignment:** Changed postgres port binding to dynamic OS assignment (prevents conflicts on shared machines; operators can override with `POSTGRES_PORT` env var)
+3. **Documentation:** Updated README.md Docker section with clear bootstrap and port discovery instructions
+4. **Validation:** All checks passed — lint, build, test, Docker verification on clean volume
+
+### Decisions Archived
+- **Docker Compose Bootstrap Gating** (2026-03-26) — migrate service required before app startup
+- **Docker Compose Postgres Port Dynamic Assignment** (2026-03-26) — port defaults to dynamic assignment
+- See `.squad/decisions.md` for full entries
+
+### Deployment Ready
+Fresh Docker Compose startup now produces usable stacks without operator manual steps.
